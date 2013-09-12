@@ -15,9 +15,8 @@ def format_currency(value):
 
 @views.route('/')
 def index():
-    listings = Listing.query.all()
+    listings = Listing.query.filter_by(published=True).all()
     return render_template('index.html', listings=listings)
-
 
 @views.route('/login')
 def login():
@@ -75,3 +74,11 @@ def submit_listing():
     db.session.add(listing)
     db.session.commit()
     return ""
+
+
+@views.route('/admin')
+def admin():
+    listings = Listing.query.all()
+    unpublished = filter(lambda x: not x.published, listings)
+    published = filter(lambda x: x.published, listings)
+    return render_template('admin.html', published=published, unpublished=unpublished)
