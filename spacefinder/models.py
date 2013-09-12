@@ -1,9 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from spacefinder import app
 import datetime
-import re
-import uuid
 import md5
+from password import hash_pw
 
 db = SQLAlchemy(app)
 

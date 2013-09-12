@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>Sign in to your account</title>
+<meta name="description" content="Sign in to your account">
+<link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+{% block body %}
+<div id="header" class='banner'>
+  <div class="container">
+    <h1>Sign in to your account</h1>
+  </div>
+</div>
+<div class='login'>
+  <div class="container">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <span class="help-block"></span>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputUsername">Username</label>
+        <div class="controls">
+          <input type="text" id="inputUsername" placeholder="Username">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input type="password" id="inputPassword" placeholder="Password">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <a href="/account/passreset">Forgot your password?</a>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button id="create-account" type="submit" class="btn btn-primary">Log in</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
+<script>
+    var display_error = function(){
+      $('.help-block').text("Incorrect username or password");
+      $('.help-block').parent().addClass("error");
+    };
+    $(document).ready(function(){
+      $("#create-account").click(function(){
+        $(".control-group").removeClass("error");
+        $(".help-block").text("");
+        username = $("#inputUsername").val();
+        password = $("#inputPassword").val();
+        $.ajax({
+          type: 'POST',
+          url: '/login',
+          data: {username: username, password: password},
+          success:function(){
+            window.location.href = "/admin";
+          },
+          error: display_error
+        });
+        return false;
+      });
+    });
+</script>
+{% endblock %}
