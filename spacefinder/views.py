@@ -1,7 +1,7 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
-from models import Listing, Account
+from models import Listing, Account, db
 from password import check_pw
 
 
@@ -43,9 +43,35 @@ def log_user_in():
     # Don't leak information
     abort(401)
 
+
 @views.route('/logout', methods=['POST'])
 def log_user_out():
     session.pop("session_id", None)
     session.pop("name", None)
     return redirect('/')
 
+
+@views.route('/submit')
+def submit():
+    return render_template('submit.html')
+
+
+@views.route('/submit', methods=['POST'])
+def submit_listing():
+    address = request.form.get('address')
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
+    space_type = request.form.get('space_type')
+    price = request.form.get('price')
+    description = request.form.get('description')
+    if not all([address, lat, lon, space_type, price, description]):
+        abort(500)
+    try:
+        price = float(price)
+    except ValueError:
+        abort(500)
+    # TODO check space type
+    listing = Listing(address, lat, lon, space_type, price, description)
+    db.session.add(listing)
+    db.session.commit()
+    return ""

@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>Sign in to your account</title>
+<meta name="description" content="Sign in to your account">
+<link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+{% block body %}
+<div id="header" class='banner'>
+  <div class="container">
+    <h1>Submit a new listing</h1>
+    <p class='lead'>All submissions must be approved by an administrator prior to appearing on the site.</p>
+  </div>
+</div>
+<div class='submit'>
+  <div class="container">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <span class="help-block"></span>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputAddress">Address</label>
+        <div class="controls">
+          <input type="text" id="inputAddress" placeholder="Property Address">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputLat">Latitude</label>
+        <div class="controls">
+          <input type="password" id="inputLat" placeholder="Latitude">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputLon">Longitude</label>
+        <div class="controls">
+          <input type="password" id="inputLon" placeholder="Longitude">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputType">Space type</label>
+        <div class="controls">
+          <input type="password" id="inputType" placeholder="office">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPrice">Price</label>
+        <div class="controls">
+          <input type="password" id="inputPrice" placeholder="Free!">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+          <input type="password" id="inputDescription" placeholder="Crazy big">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button id="create-account" type="submit" class="btn btn-primary">Submit your listing</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
+<script>
+    var display_error = function(){
+      $('.help-block').text("There was a problem with your submission");
+      $('.help-block').parent().addClass("error");
+    };
+    $(document).ready(function(){
+      $("#create-account").click(function(){
+        $(".control-group").removeClass("error");
+        $(".help-block").text("");
+        address = $("#inputAddress").val();
+        lat = $("#inputLat").val();
+        lon = $("#inputLon").val();
+        space_type = $("#inputType").val();
+        price = $("#inputPrice").val();
+        description = $("#inputDescription").val();
+        $.ajax({
+          type: 'POST',
+          url: '/submit',
+          data: {address: address, lat: lat, lon: lon, space_type: space_type, price: price, description: description},
+          success:function(){
+            window.location.href = "/";
+          },
+          error: display_error
+        });
+        return false;
+      });
+    });
+</script>
+{% endblock %}
