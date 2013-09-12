@@ -42,6 +42,7 @@ class Account(db.Model):
 class Listing(db.Model):
     __tablename__ = "listings"
     id = db.Column(db.Integer, primary_key=True)
+    published = db.Column(db.Boolean(), default=False, nullable=False)
     address = db.Column(db.String(120), nullable=False)
     latitude = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.String(16), nullable=False) 
