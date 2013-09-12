@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block head %}
+    <title></title>
+    <meta name="description" content="">
+{% endblock %}
+{% block body %}
+<div class='container'>
+  <h2>Pending submissions</h2>
+  <table class='table table-bordered'>
+  <thead>
+    <tr>  
+      <th>
+        Address
+      </th>
+      <th>
+        Price
+      </th>
+      <th>
+        Description
+      </th>
+    </tr>  
+  </thead>
+  {% for listing in unpublished %}
+    <tr>  
+      <td>
+        {{listing.address}}
+      </td>
+      <td>
+        {{listing.price}}
+      </td>
+      <td>
+        {{listing.description}}
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
