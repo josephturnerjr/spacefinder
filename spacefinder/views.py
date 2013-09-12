@@ -3,6 +3,7 @@ import json
 import datetime
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
+from models import Listing
 
 
 views = Blueprint('spacefinder_views', __name__)
@@ -15,4 +16,5 @@ def format_currency(value):
 
 @views.route('/')
 def index():
-    return render_template('index.html')
+    listings = Listing.query.all()
+    return render_template('index.html', listings=listings)

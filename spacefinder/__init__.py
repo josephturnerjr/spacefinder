@@ -12,4 +12,5 @@ def page_not_found(error):
 
 
 from spacefinder.views import views
+from spacefinder.db_functions import init_db
 app.register_blueprint(views)

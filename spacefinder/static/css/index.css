@@ -4,26 +4,3 @@
   width: 940px;
   padding: 0 30px;
 }
-#main-navbar .navbar-inner {
-  background: #2b2b2b;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-}
-#main-navbar .navbar-inner .brand {
-  text-shadow: none;
-  color: white;
-  font-family: 'Oswald', sans-serif;
-}
-#main-navbar .navbar-inner .nav > li > a {
-  text-shadow: none;
-  color: #cccccc;
-  moz-transition: text-shadow 0.5s, color 0.5s;
-  -webkit-transition: text-shadow 0.5s, color 0.5s;
-  -o-transition: text-shadow 0.5s, color 0.5s;
-  transition: text-shadow 0.5s, color 0.5s;
-}
-#main-navbar .navbar-inner .nav > li > a:hover {
-  color: white;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
