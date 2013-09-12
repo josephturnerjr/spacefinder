@@ -38,7 +38,7 @@ def log_user_in():
             # Valid password
             session.permanent = True
             session['session_id'] = user.id
-            session['name'] = user.name
+            session['name'] = user.username
             return ""
     # Don't leak information
     abort(401)
