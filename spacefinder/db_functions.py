@@ -4,7 +4,7 @@ from models import db, Listing, Account
 def init_db():
     db.drop_all()
     db.create_all()
-    for i in range(100):
+    for i in range(1):
         db.session.add(Listing("1500 Union Ave #2500, Baltimore, MD",
                                "39.334497", "-76.64081", "office", 2500,
                                "Headquarters for Maryland Nonprofits"))

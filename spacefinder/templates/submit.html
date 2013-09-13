@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block head %}
-<title>Sign in to your account</title>
-<meta name="description" content="Sign in to your account">
-<link rel="stylesheet" href="/static/css/login.css">
+<title>Submit a new listing</title>
+<meta name="description" content="Submit a new listing">
+    <link rel="stylesheet" href="/static/css/submit.css">
 {% endblock %}
 {% block body %}
 <div id="header" class='banner'>
@@ -13,7 +13,9 @@
 </div>
 <div class='submit'>
   <div class="container">
-    <form class="form-horizontal">
+  <div class="row">
+  <div class="span4">
+    <form id='address' class="">
       <div class="control-group">
         <span class="help-block"></span>
       </div>
@@ -24,6 +26,18 @@
           <span class="help-inline"></span>
         </div>
       </div>
+      <div class="control-group">
+        <div class="controls">
+          <button id="lookup-address" type="submit" class="btn btn-primary">Look up address</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div id='map_canvas' class='span8'>
+  </div>
+  </div>
+    <!--
+    <form class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="inputLat">Latitude</label>
         <div class="controls">
@@ -65,12 +79,20 @@
         </div>
       </div>
     </form>
+    -->
   </div>
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="{{url_for('static', filename='js/main.js')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/submit.js')}}"></script>
 <script>
+  $('#address').submit(function(){
+    codeAddress($('#inputAddress').val());
+    return false;
+  });
+  /*
     var display_error = function(){
       $('.help-block').text("There was a problem with your submission");
       $('.help-block').parent().addClass("error");
@@ -97,5 +119,6 @@
         return false;
       });
     });
+  */
 </script>
 {% endblock %}
