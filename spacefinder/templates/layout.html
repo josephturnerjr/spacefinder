@@ -33,15 +33,17 @@
             <ul class='nav pull-right action-nav'>
               <li><a href='/admin' data-toggle='tooltip' data-placement='bottom' title='Go to your dashboard'><i class='icon-dashboard'></i></a></li>
               <li class='divider'></li>
-              <li><a id='logout-button' href="/logout"  data-toggle='tooltip' data-placement='bottom' title='Log out'><i class='icon-signout'></i></a></li>
+              <li><a id='logout-button' href="/logout" data-toggle='tooltip' data-placement='bottom' title='Log out'><i class='icon-signout'></i></a></li>
             </ul>
             <p class='navbar-text pull-right'>Hi, {{ session["name"] }}</p>
           {% endif %}
       </div>
       </div>
     </div>
+    <div class='body-main'>
     {% block body %}{% endblock %}  
     {% block footer %}  
+    </div>
     <div class='footer'>
       <div class='container'>
           <p class='pull-left'>Copyright &copy; 2013 Maryland Nonprofits
@@ -65,7 +67,7 @@
         return false;
       };
       $(document).ready(function(){
-        $('#main-navbar').tooltip({
+        $('body').tooltip({
               selector: "a[data-toggle=tooltip]"
         });
         $('#logout-button').click(logout_onclick);

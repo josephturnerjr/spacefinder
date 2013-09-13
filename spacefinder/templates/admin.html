@@ -18,6 +18,9 @@
       <th>
         Description
       </th>
+      <th>
+        Actions
+      </th>
     </tr>  
   </thead>
   {% for listing in unpublished %}
@@ -26,10 +29,52 @@
         {{listing.address}}
       </td>
       <td>
-        {{listing.price}}
+        {{listing.price|currency}}
       </td>
       <td>
         {{listing.description}}
+      </td>
+      <td>
+        <a href='/admin/listing/{{listing.id}}/publish' data-toggle='tooltip' data-placement='bottom' title='Publish listing'><i class='icon-check'></i></a>&nbsp;
+        <a href='#' data-toggle='tooltip' data-placement='bottom' title='Edit listing'><i class='icon-pencil'></i></a>&nbsp;
+        <a href='/admin/listing/{{listing.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete listing'><i class='icon-trash'></i></a>
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+  <h2>Active listings</h2>
+  <table class='table table-bordered'>
+  <thead>
+    <tr>  
+      <th>
+        Address
+      </th>
+      <th>
+        Price
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>  
+  </thead>
+  {% for listing in published %}
+    <tr>  
+      <td>
+        {{listing.address}}
+      </td>
+      <td>
+        {{listing.price|currency}}
+      </td>
+      <td>
+        {{listing.description}}
+      </td>
+      <td>
+        <a href='/admin/listing/{{listing.id}}/unpublish' data-toggle='tooltip' data-placement='bottom' title='Unpublish listing'><i class='icon-ban-circle'></i></a>&nbsp;
+        <a href='#' data-toggle='tooltip' data-placement='bottom' title='Edit listing'><i class='icon-pencil'></i></a>&nbsp;
+        <a href='/admin/listing/{{listing.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete listing'><i class='icon-trash'></i></a>
       </td>
     </tr>  
   {% endfor %}

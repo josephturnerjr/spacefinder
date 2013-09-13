@@ -1,5 +1,5 @@
 class Config(object):
-    SECRET_KEY = '' 
+    SECRET_KEY = 'abc' 
 
 
 class ProductionConfig(Config):

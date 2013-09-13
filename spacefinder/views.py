@@ -82,3 +82,30 @@ def admin():
     unpublished = filter(lambda x: not x.published, listings)
     published = filter(lambda x: x.published, listings)
     return render_template('admin.html', published=published, unpublished=unpublished)
+
+
+@views.route('/admin/listing/<int:listing_id>/publish')
+def publish(listing_id):
+    listing = Listing.query.get(listing_id)
+    if listing:
+        listing.published = True
+        db.session.add(listing)
+        db.session.commit()
+    return redirect('/admin')
+
+@views.route('/admin/listing/<int:listing_id>/unpublish')
+def unpublish(listing_id):
+    listing = Listing.query.get(listing_id)
+    if listing:
+        listing.published = False
+        db.session.add(listing)
+        db.session.commit()
+    return redirect('/admin')
+
+@views.route('/admin/listing/<int:listing_id>/delete')
+def delete_listing(listing_id):
+    listing = Listing.query.get(listing_id)
+    if listing:
+        db.session.delete(listing)
+        db.session.commit()
+    return redirect('/admin')
