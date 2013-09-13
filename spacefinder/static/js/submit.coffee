@@ -15,11 +15,15 @@ drawMap = (locations) ->
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
+  bounds = new google.maps.LatLngBounds()
   for location in locations
     marker = new google.maps.Marker({
         map: map,
         position: location.geometry.location,
     })
+    bounds.extend(location.geometry.location)
+  map.setCenter(bounds.getCenter())
+  map.fitBounds(bounds)
 
 
 window.codeAddress = codeAddress
