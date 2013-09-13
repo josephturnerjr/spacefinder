@@ -1,3 +1,7 @@
+html,
+body {
+  height: 100%;
+}
 .container,
 .navbar-static-top .container,
 .navbar-fixed-top .container {
@@ -11,11 +15,14 @@
   padding: 15px 0;
   border-top: 1px solid #eee;
 }
+.footer p {
+  margin: 0;
+}
 body {
   background: #eee;
 }
 .body-main {
-  min-height: 480px;
+  min-height: 100%;
   background: #fff;
   padding: 30px 0;
 }

@@ -2,11 +2,12 @@
 {% block head %}
     <title></title>
     <meta name="description" content="">
+    <link rel="stylesheet" href="/static/css/main.css">
 {% endblock %}
 {% block body %}
 <div class='container'>
   <h2>Currently available sublets</h2>
-  <table class='table table-bordered'>
+  <table cellpadding="0" cellspacing="0" border="0" id='available' class='table table-bordered table-striped'>
   <thead>
     <tr>  
       <th>
@@ -37,4 +38,18 @@
 </div>
 {% endblock %}
 {% block scripts %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script src="/static/js/vendor/paging.js"></script>
+  <script>
+  $(document).ready(function(){
+      $('#available').dataTable( {
+        "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+        "sPaginationType": "bootstrap"
+      });
+  });
+  $.extend( $.fn.dataTableExt.oStdClasses, {
+    "sWrapper": "dataTables_wrapper form-inline"
+  } );
+  </script>
+    
 {% endblock %}
