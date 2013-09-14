@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>Submit a new listing</title>
+<meta name="description" content="Submit a new listing">
+    <link rel="stylesheet" href="/static/css/submit.css">
+{% endblock %}
+{% block body %}
+<div id="header" class='banner'>
+  <div class="container">
+    <h1>Step 2</h1>
+    <p class='lead muted'>{{address}}</p>
+  </div>
+</div>
+<div class='submit'>
+  <div class="container">
+    <form class="form-horizontal" method="post" action="/submit/step2">
+      <input type="hidden" name="address" value="{{address}}">
+      <input type="hidden" name="latitude" value="{{lat}}">
+      <input type="hidden" name="longitude" value="{{lon}}">
+      <div class="control-group">
+        <span class="help-block">{{error}}</span>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputType">Space type</label>
+        <div class="controls">
+          <input type="text" value="{{space_type}}" name="space_type" id="inputType" placeholder="office">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPrice">Price</label>
+        <div class="controls">
+          <input type="text" value="{{price}}" name="price" id="inputPrice" placeholder="Free!">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+          <input type="text" value="{{description}}" name="description" id="inputDescription" placeholder="Crazy big, yet cozy!">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button id="create-account" type="submit" class="btn btn-primary">Submit your listing</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
+<script src="{{url_for('static', filename='js/submit.js')}}"></script>
+<script>
+</script>
+{% endblock %}

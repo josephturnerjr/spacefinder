@@ -13,29 +13,44 @@
 </div>
 <div class='submit'>
   <div class="container">
-  <div class="row">
-  <div class="span4">
-    <form id='address' class="">
-      <div class="control-group">
-        <span class="help-block"></span>
+    <div class="row">
+      <div class="span4">
+        <form id='address' class="">
+          <div class="control-group">
+            <span class="help-block"></span>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputAddress">Address</label>
+            <div class="controls">
+              <input type="text" id="inputAddress" placeholder="Property Address">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button id="lookup-address" type="submit" class="btn btn-primary">Look up address</button>
+            </div>
+          </div>
+        </form>
+        <form action='/submit' method='post'>
+          <input type='hidden' name='latitude' id='latitude'></input>
+          <input type='hidden' name='longitude' id='longitude'></input>
+          <div class="control-group">
+            <label class="muted control-label" for="selectAddress">Please select the address:</label>
+            <div class="controls">
+              <select disabled name='formatted-address' id='location-list'></select>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button disabled id="step2" type="submit" class="btn btn-primary">Continue</button>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="inputAddress">Address</label>
-        <div class="controls">
-          <input type="text" id="inputAddress" placeholder="Property Address">
-          <span class="help-inline"></span>
-        </div>
+      <div id='map_canvas' class='span8'>
       </div>
-      <div class="control-group">
-        <div class="controls">
-          <button id="lookup-address" type="submit" class="btn btn-primary">Look up address</button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div id='map_canvas' class='span8'>
-  </div>
-  </div>
+    </div>
     <!--
     <form class="form-horizontal">
       <div class="control-group">
@@ -85,40 +100,11 @@
 {% endblock %}
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
 <script>
   $('#address').submit(function(){
     codeAddress($('#inputAddress').val());
     return false;
   });
-  /*
-    var display_error = function(){
-      $('.help-block').text("There was a problem with your submission");
-      $('.help-block').parent().addClass("error");
-    };
-    $(document).ready(function(){
-      $("#create-account").click(function(){
-        $(".control-group").removeClass("error");
-        $(".help-block").text("");
-        address = $("#inputAddress").val();
-        lat = $("#inputLat").val();
-        lon = $("#inputLon").val();
-        space_type = $("#inputType").val();
-        price = $("#inputPrice").val();
-        description = $("#inputDescription").val();
-        $.ajax({
-          type: 'POST',
-          url: '/submit',
-          data: {address: address, lat: lat, lon: lon, space_type: space_type, price: price, description: description},
-          success:function(){
-            window.location.href = "/";
-          },
-          error: display_error
-        });
-        return false;
-      });
-    });
-  */
 </script>
 {% endblock %}

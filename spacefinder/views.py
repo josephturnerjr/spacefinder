@@ -51,29 +51,45 @@ def log_user_out():
 
 
 @views.route('/submit')
+@views.route('/submit/step2')
 def submit():
     return render_template('submit.html')
 
-
 @views.route('/submit', methods=['POST'])
-def submit_listing():
+def submit_step1():
+    address = request.form.get('formatted-address')
+    lat = request.form.get('latitude')
+    lon = request.form.get('longitude')
+    print request.form, address, lat, lon
+    if not all([address, lat, lon]):
+        return redirect('/submit')
+    return render_template('submit2.html', address=address, lat=lat, lon=lon)
+
+@views.route('/submit/step2', methods=['POST'])
+def submit_step2():
     address = request.form.get('address')
-    lat = request.form.get('lat')
-    lon = request.form.get('lon')
+    lat = request.form.get('latitude')
+    lon = request.form.get('longitude')
+    print address, lat, lon
+    if not all([address, lat, lon]):
+        return redirect('/submit')
     space_type = request.form.get('space_type')
     price = request.form.get('price')
     description = request.form.get('description')
-    if not all([address, lat, lon, space_type, price, description]):
-        abort(500)
+    if not all([space_type, price, description]):
+        return render_template('submit2.html', address=address, lat=lat, lon=lon, price=price, space_type=space_type, description=description, error="All fields must be filled in")
     try:
         price = float(price)
     except ValueError:
-        abort(500)
+        return render_template('submit2.html', address=address, lat=lat, lon=lon, price=price, space_type=space_type, description=description, error="Price must be a number")
     # TODO check space type
+    create_listing(address, lat, lon, space_type, price, description)
+    return render_template("thankyou.html")
+
+def create_listing(address, lat, lon, space_type, price, description):
     listing = Listing(address, lat, lon, space_type, price, description)
     db.session.add(listing)
     db.session.commit()
-    return ""
 
 
 @views.route('/admin')
