@@ -43,7 +43,7 @@
       });
       bounds.extend(location.geometry.location);
       _fn(location);
-      loc_list.append("<option value='" + location.formatted_address + "'>" + location.formatted_address + "</option>");
+      loc_list.html('').append("<option value='" + location.formatted_address + "'>" + location.formatted_address + "</option>");
     }
     g_locations = locations;
     loc_list.change(function(e) {
