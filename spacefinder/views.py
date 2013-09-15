@@ -3,6 +3,8 @@ from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
 from models import Listing, Account, db
 from password import check_pw
+import sqlalchemy
+import json
 
 
 views = Blueprint('spacefinder_views', __name__)
@@ -16,7 +18,8 @@ def format_currency(value):
 @views.route('/')
 def index():
     listings = Listing.query.filter_by(published=True).all()
-    return render_template('index.html', listings=listings)
+    location_json = json.dumps([[float(l.latitude), float(l.longitude)] for l in listings])
+    return render_template('index.html', listings=listings, location_json = location_json)
 
 @views.route('/login')
 def login():
@@ -83,7 +86,10 @@ def submit_step2():
     except ValueError:
         return render_template('submit2.html', address=address, lat=lat, lon=lon, price=price, space_type=space_type, description=description, error="Price must be a number")
     # TODO check space type
-    create_listing(address, lat, lon, space_type, price, description)
+    try:
+        create_listing(address, lat, lon, space_type, price, description)
+    except sqlalchemy.exc.IntegrityError:
+        return render_template('submit2.html', address=address, lat=lat, lon=lon, price=price, space_type=space_type, description=description, error="Space type must be one of meeting or office")
     return render_template("thankyou.html")
 
 def create_listing(address, lat, lon, space_type, price, description):

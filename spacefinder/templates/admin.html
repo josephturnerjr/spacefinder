@@ -19,6 +19,12 @@
         Description
       </th>
       <th>
+        Space type 
+      </th>
+      <th>
+        Submitted on 
+      </th>
+      <th>
         Actions
       </th>
     </tr>  
@@ -33,6 +39,12 @@
       </td>
       <td>
         {{listing.description}}
+      </td>
+      <td>
+        {{listing.space_type}}
+      </td>
+      <td>
+        {{listing.created.date()}}
       </td>
       <td>
         <a href='/admin/listing/{{listing.id}}/publish' data-toggle='tooltip' data-placement='bottom' title='Publish listing'><i class='icon-check'></i></a>&nbsp;
@@ -56,6 +68,12 @@
         Description
       </th>
       <th>
+        Space type 
+      </th>
+      <th>
+        Submitted on 
+      </th>
+      <th>
         Actions
       </th>
     </tr>  
@@ -70,6 +88,12 @@
       </td>
       <td>
         {{listing.description}}
+      </td>
+      <td>
+        {{listing.space_type}}
+      </td>
+      <td>
+        {{listing.created.date()}}
       </td>
       <td>
         <a href='/admin/listing/{{listing.id}}/unpublish' data-toggle='tooltip' data-placement='bottom' title='Unpublish listing'><i class='icon-ban-circle'></i></a>&nbsp;
