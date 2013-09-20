@@ -1,16 +1,18 @@
+PYTHON = ./env/bin/python
+
 run: 
-	tmux new-session -d -s olgn './env/bin/python runserver.py'
+	tmux new-session -d -s olgn '$(PYTHON) runserver.py'
 	tmux splitw -h -t olgn 'cd spacefinder/static/css; ~/bin/lesswatch'
 	tmux attach
 
 debug:
-	python runserver.py
+	$(PYTHON) runserver.py
 
 db:
-	python create_db.py
+	$(PYTHON) create_db.py
 
 test:
-	python -m unittest discover tests/
+	$(PYTHON) -m unittest discover tests/
 
 dummy:
 

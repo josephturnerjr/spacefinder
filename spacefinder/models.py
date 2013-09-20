@@ -42,7 +42,8 @@ class Listing(db.Model):
     __tablename__ = "listings"
     id = db.Column(db.Integer, primary_key=True)
     published = db.Column(db.Boolean(), default=False, nullable=False)
-    address = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(240), nullable=False)
     latitude = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.String(16), nullable=False) 
     space_type = db.Column(db.Enum('office', 'meeting'), nullable=False)
@@ -50,10 +51,11 @@ class Listing(db.Model):
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, address, lat, lon, space_type, price, description):
+    def __init__(self, address, lat, lon, name, space_type, price, description):
         self.address = address
         self.latitude = lat
         self.longitude = lon
+        self.name = name
         self.space_type = space_type
         self.price = price
         self.description = description
