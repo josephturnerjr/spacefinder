@@ -12,13 +12,13 @@
   <thead>
     <tr>  
       <th>
+        Property
+      </th>
+      <th>
         Address
       </th>
       <th>
         Price
-      </th>
-      <th>
-        Description
       </th>
       <th>
         Space type 
@@ -31,13 +31,13 @@
   {% for listing in listings %}
     <tr>  
       <td>
+        {{listing.name}}
+      </td>
+      <td>
         {{listing.address}}
       </td>
       <td>
         {{listing.price|currency}}
-      </td>
-      <td>
-        {{listing.description}}
       </td>
       <td>
         {{listing.space_type}}

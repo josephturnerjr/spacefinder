@@ -10,6 +10,9 @@
   <thead>
     <tr>  
       <th>
+        Property
+      </th>
+      <th>
         Address
       </th>
       <th>
@@ -31,6 +34,9 @@
   </thead>
   {% for listing in unpublished %}
     <tr>  
+      <td>
+        {{listing.name}}
+      </td>
       <td>
         {{listing.address}}
       </td>
@@ -59,6 +65,9 @@
   <thead>
     <tr>  
       <th>
+        Property
+      </th>
+      <th>
         Address
       </th>
       <th>
@@ -80,6 +89,9 @@
   </thead>
   {% for listing in published %}
     <tr>  
+      <td>
+        {{listing.name}}
+      </td>
       <td>
         {{listing.address}}
       </td>
