@@ -18,7 +18,7 @@ drawMap = (locations) ->
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
   bounds = new google.maps.LatLngBounds()
   loc_list = $('#location-list')
-  loc_list.removeAttr('disabled')
+  loc_list.removeAttr('disabled').html('')
   for location in locations
     marker = new google.maps.Marker({
         map: map,
@@ -30,7 +30,7 @@ drawMap = (locations) ->
         alert location.formatted_address
       )
     )(location)
-    loc_list.html('').append("<option value='#{location.formatted_address}'>#{location.formatted_address}</option>")
+    loc_list.append("<option value='#{location.formatted_address}'>#{location.formatted_address}</option>")
   g_locations = locations
   loc_list.change((e)->
     update_hidden()
