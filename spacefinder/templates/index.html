@@ -31,7 +31,7 @@
   {% for listing in listings %}
     <tr>  
       <td>
-        {{listing.name}}
+        <a href='/listing/{{listing.id}}'>{{listing.name}}</a>
       </td>
       <td>
         {{listing.address}}

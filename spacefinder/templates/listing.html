@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block head %}
+    <title></title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/static/css/listing.css">
+{% endblock %}
+{% block body %}
+<div class='container'>
+  <div class='row-fluid'>
+    <div class='span7'>
+      <h2>{{listing.name}}</h2>
+      <h3 class='muted'>{{listing.address}}</h3>
+      <p>
+        <strong>Price: </strong> {{listing.price|currency}}
+      </p>
+      <p>
+        <strong>Type of space: </strong> {{listing.space_type}}
+      </p>
+      <p>
+        {{listing.description}}
+      </p>
+      <p class='muted'>
+        Listing created on {{listing.created.date()}}
+      </p>
+    </div>
+    <div class='span5'>
+      <div id='listing-map'>
+        <img src="http://maps.googleapis.com/maps/api/staticmap?markers=|{{listing.latitude}},{{listing.longitude}}&size=360x360&zoom=14&sensor=false">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+  <script>
+  </script>
+    
+{% endblock %}

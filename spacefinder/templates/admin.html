@@ -35,7 +35,7 @@
   {% for listing in unpublished %}
     <tr>  
       <td>
-        {{listing.name}}
+        <a href='/listing/{{listing.id}}'>{{listing.name}}</a>
       </td>
       <td>
         {{listing.address}}
@@ -90,7 +90,7 @@
   {% for listing in published %}
     <tr>  
       <td>
-        {{listing.name}}
+        <a href='/listing/{{listing.id}}'>{{listing.name}}</a>
       </td>
       <td>
         {{listing.address}}

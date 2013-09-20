@@ -32,6 +32,7 @@ def index():
     location_json = json.dumps([[float(l.latitude), float(l.longitude)] for l in listings])
     return render_template('index.html', listings=listings, location_json = location_json)
 
+
 @views.route('/login')
 def login():
     return render_template('login.html')
@@ -69,15 +70,16 @@ def log_user_out():
 def submit():
     return render_template('submit.html')
 
+
 @views.route('/submit', methods=['POST'])
 def submit_step1():
     address = request.form.get('formatted-address')
     lat = request.form.get('latitude')
     lon = request.form.get('longitude')
-    print request.form, address, lat, lon
     if not all([address, lat, lon]):
         return redirect('/submit')
     return render_template('submit2.html', address=address, lat=lat, lon=lon)
+
 
 @views.route('/submit/step2', methods=['POST'])
 def submit_step2():
@@ -91,21 +93,44 @@ def submit_step2():
     description = request.form.get('description')
     name = request.form.get('name')
     if not all([space_type, price, description, name]):
-        return render_template('submit2.html', address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="All required fields must be filled in")
+        return render_template('submit2.html',
+                                address=address, lat=lat, lon=lon,
+                                name=name, price=price, space_type=space_type,
+                                description=description,
+                                error="All required fields must be filled in")
     try:
         price = float(price)
     except ValueError:
-        return render_template('submit2.html', address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="Price must be a number")
+        return render_template('submit2.html',
+                                address=address,
+                                lat=lat, lon=lon, name=name, price=price,
+                                space_type=space_type,
+                                description=description, error="Price must be a number")
     try:
         create_listing(address, lat, lon, name, space_type, price, description)
     except sqlalchemy.exc.IntegrityError:
-        return render_template('submit2.html', address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="Space type must be one of meeting or office")
+        return render_template('submit2.html',
+                                address=address, lat=lat,
+                                lon=lon, name=name, price=price,
+                                space_type=space_type,
+                                description=description,
+                                error="Space type must be one of meeting or office")
     return render_template("thankyou.html")
+
 
 def create_listing(address, lat, lon, name, space_type, price, description):
     listing = Listing(address, lat, lon, name, space_type, price, description)
     db.session.add(listing)
     db.session.commit()
+
+
+@views.route('/listing/<int:listing_id>')
+def listing(listing_id):
+    listing = Listing.query.get_or_404(listing_id)
+    if not (listing.published or session.get('session_id')):
+        print "abortin"
+        abort(404)
+    return render_template('listing.html', listing=listing)
 
 
 @views.route('/admin')
@@ -127,6 +152,7 @@ def publish(listing_id):
         db.session.commit()
     return redirect('/admin')
 
+
 @views.route('/admin/listing/<int:listing_id>/unpublish')
 @requires_login
 def unpublish(listing_id):
@@ -136,6 +162,7 @@ def unpublish(listing_id):
         db.session.add(listing)
         db.session.commit()
     return redirect('/admin')
+
 
 @views.route('/admin/listing/<int:listing_id>/delete')
 @requires_login
@@ -152,7 +179,12 @@ def delete_listing(listing_id):
 def edit_listing(listing_id):
     listing = Listing.query.get(listing_id)
     if listing:
-        return render_template('edit-listing.html', listing=listing, address=listing.address, lat=listing.latitude, lon=listing.longitude, name=listing.name, price=listing.price, space_type=listing.space_type, description=listing.description)
+        return render_template('edit-listing.html',
+                                listing=listing, address=listing.address,
+                                lat=listing.latitude, lon=listing.longitude,
+                                name=listing.name, price=listing.price,
+                                space_type=listing.space_type,
+                                description=listing.description)
     return redirect('/admin')
 
 
@@ -172,11 +204,19 @@ def edit_step_2(listing_id):
     description = request.form.get('description')
     name = request.form.get('name')
     if not all([space_type, price, description, name]):
-        return render_template('edit-listing.html', listing=listing, address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="All required fields must be filled in")
+        return render_template('edit-listing.html',
+                                listing=listing, address=address, lat=lat,
+                                lon=lon, name=name, price=price,
+                                space_type=space_type, description=description,
+                                error="All required fields must be filled in")
     try:
         price = float(price)
     except ValueError:
-        return render_template('edit-listing.html', listing=listing, address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="Price must be a number")
+        return render_template('edit-listing.html',
+                                listing=listing, address=address, lat=lat,
+                                lon=lon, name=name, price=price,
+                                space_type=space_type, description=description,
+                                error="Price must be a number")
     try:
         listing.name = name
         listing.space_type = space_type
@@ -185,5 +225,10 @@ def edit_step_2(listing_id):
         db.session.add(listing)
         db.session.commit()
     except sqlalchemy.exc.IntegrityError:
-        return render_template('edit-listing.html', listing=listing, address=address, lat=lat, lon=lon, name=name, price=price, space_type=space_type, description=description, error="Space type must be one of meeting or office")
+        return render_template('edit-listing.html',
+                                listing=listing,
+                                address=address, lat=lat, lon=lon, name=name,
+                                price=price, space_type=space_type,
+                                description=description,
+                                error="Space type must be one of meeting or office")
     return redirect('/admin')
