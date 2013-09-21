@@ -29,8 +29,8 @@ def format_currency(value):
 @views.route('/')
 def index():
     listings = Listing.query.filter_by(published=True).all()
-    location_json = json.dumps([[float(l.latitude), float(l.longitude)] for l in listings])
-    return render_template('index.html', listings=listings, location_json = location_json)
+    locations = [[float(l.latitude), float(l.longitude), l.name] for l in listings]
+    return render_template('index.html', listings=listings, locations = locations)
 
 
 @views.route('/login')

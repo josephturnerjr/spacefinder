@@ -10,14 +10,16 @@
     <div class='span7'>
       <h2>{{listing.name}}</h2>
       <h3 class='muted'>{{listing.address}}</h3>
+      <hr />
       <p>
         <strong>Price: </strong> {{listing.price|currency}}
       </p>
       <p>
         <strong>Type of space: </strong> {{listing.space_type}}
       </p>
+      <hr />
       <p>
-        {{listing.description}}
+        <span class='description'>{{listing.description}}</span>
       </p>
       <hr/>
       <p class='muted'>

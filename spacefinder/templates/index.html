@@ -64,7 +64,11 @@
           "sEmptyTable": "There are no listings at this time."
         }
       });
-      draw_listing_map({{location_json}});
+      draw_listing_map([
+        {%for listing in listings %}
+          [{{listing.latitude}}, {{listing.longitude}}, "<h4>{{listing.name}}</h4><p class='muted'>{{listing.address}}</p><p><strong>Price: </strong> {{listing.price|currency}}</p><p><strong>Space type: </strong> {{listing.space_type}}</p><a href='/listing/{{listing.id}}'>Read more &raquo;</a>"],
+        {% endfor %}
+      ]);
   });
   $.extend( $.fn.dataTableExt.oStdClasses, {
     "sWrapper": "dataTables_wrapper form-inline"

@@ -11,6 +11,14 @@ drawMap = (locations) ->
           map: map,
           position: loc,
       })
+      info = new google.maps.InfoWindow({
+        content: "<h3>#{location[2]}</h3> "
+      })
+      ((marker, info) ->
+        google.maps.event.addListener(marker, 'click', () ->
+          info.open(map, marker)
+        )
+      )(marker, info)
       bounds.extend(loc)
     map.setCenter(bounds.getCenter())
     map.fitBounds(bounds)
