@@ -59,7 +59,10 @@
   $(document).ready(function(){
       $('#available').dataTable( {
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
-        "sPaginationType": "bootstrap"
+        "sPaginationType": "bootstrap",
+        "oLanguage": {
+          "sEmptyTable": "There are no listings at this time."
+        }
       });
       draw_listing_map({{location_json}});
   });
