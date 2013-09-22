@@ -137,9 +137,10 @@ def listing(listing_id):
 @requires_login
 def admin():
     listings = Listing.query.all()
+    accounts = Account.query.all()
     unpublished = filter(lambda x: not x.published, listings)
     published = filter(lambda x: x.published, listings)
-    return render_template('admin.html', published=published, unpublished=unpublished)
+    return render_template('admin.html', published=published, unpublished=unpublished, accounts=accounts)
 
 
 @views.route('/admin/listing/<int:listing_id>/publish')
@@ -231,4 +232,27 @@ def edit_step_2(listing_id):
                                 price=price, space_type=space_type,
                                 description=description,
                                 error="Space type must be one of meeting or office")
+    return redirect('/admin')
+
+
+@views.route('/admin/account/<int:account_id>/delete')
+@requires_login
+def delete_account(account_id):
+    account = Account.query.get(account_id)
+    if account:
+        db.session.delete(account)
+        db.session.commit()
+    return redirect('/admin')
+
+@views.route('/admin/account/create', methods=['POST'])
+@requires_login
+def create_account():
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    if not all([username, email, password]):
+        abort(500)
+    account = Account(username, email, password)
+    db.session.add(account)
+    db.session.commit()
     return redirect('/admin')
