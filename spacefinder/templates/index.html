@@ -40,7 +40,7 @@
         {{listing.price|currency}}
       </td>
       <td>
-        {{listing.space_type}}
+        {{listing.space_type.name}}
       </td>
       <td>
         {{listing.created.date()}}
@@ -66,7 +66,7 @@
       });
       draw_listing_map([
         {%for listing in listings %}
-          [{{listing.latitude}}, {{listing.longitude}}, "<h4>{{listing.name}}</h4><p class='muted'>{{listing.address}}</p><p><strong>Price: </strong> {{listing.price|currency}}</p><p><strong>Space type: </strong> {{listing.space_type}}</p><a href='/listing/{{listing.id}}'>Read more &raquo;</a>"],
+          [{{listing.latitude}}, {{listing.longitude}}, "<h4>{{listing.name}}</h4><p class='muted'>{{listing.address}}</p><p><strong>Price: </strong> {{listing.price|currency}}</p><p><strong>Space type: </strong> {{listing.space_type.name}}</p><a href='/listing/{{listing.id}}'>Read more &raquo;</a>"],
         {% endfor %}
       ]);
   });

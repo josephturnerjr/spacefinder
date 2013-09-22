@@ -1,7 +1,7 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
-from models import Listing, Account, db
+from models import Listing, Account, ListingType, db
 from password import check_pw
 import sqlalchemy
 import json
@@ -78,7 +78,8 @@ def submit_step1():
     lon = request.form.get('longitude')
     if not all([address, lat, lon]):
         return redirect('/submit')
-    return render_template('submit2.html', address=address, lat=lat, lon=lon)
+    listing_types = ListingType.query.all()
+    return render_template('submit2.html', types=listing_types, address=address, lat=lat, lon=lon)
 
 
 @views.route('/submit/step2', methods=['POST'])
@@ -89,11 +90,22 @@ def submit_step2():
     if not all([address, lat, lon]):
         return redirect('/submit')
     space_type = request.form.get('space_type')
+    try:
+        # Check that we've received a valid type id
+        # Otherwise bogus form submission
+        space_type = int(space_type)
+        t = ListingType.query.get(space_type)
+        if not t:
+            return redirect('/submit')
+    except TypeError:
+        return redirect('/submit')
     price = request.form.get('price')
     description = request.form.get('description')
     name = request.form.get('name')
-    if not all([space_type, price, description, name]):
+    listing_types = ListingType.query.all()
+    if not all([space_type, price, name]):
         return render_template('submit2.html',
+                                types=listing_types,
                                 address=address, lat=lat, lon=lon,
                                 name=name, price=price, space_type=space_type,
                                 description=description,
@@ -102,6 +114,7 @@ def submit_step2():
         price = float(price)
     except ValueError:
         return render_template('submit2.html',
+                                types=listing_types,
                                 address=address,
                                 lat=lat, lon=lon, name=name, price=price,
                                 space_type=space_type,
@@ -110,6 +123,7 @@ def submit_step2():
         create_listing(address, lat, lon, name, space_type, price, description)
     except sqlalchemy.exc.IntegrityError:
         return render_template('submit2.html',
+                                types=listing_types,
                                 address=address, lat=lat,
                                 lon=lon, name=name, price=price,
                                 space_type=space_type,

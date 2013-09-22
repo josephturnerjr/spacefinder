@@ -46,17 +46,27 @@ class Listing(db.Model):
     address = db.Column(db.String(240), nullable=False)
     latitude = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.String(16), nullable=False) 
-    space_type = db.Column(db.Enum('office', 'meeting'), nullable=False)
+    space_type_id = db.Column(db.Integer, db.ForeignKey('listing_types.id'), nullable=False)
+    space_type = db.relationship("ListingType")
     price = db.Column(db.Float(), nullable=False)
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, address, lat, lon, name, space_type, price, description):
+    def __init__(self, address, lat, lon, name, space_type_id, price, description):
         self.address = address
         self.latitude = lat
         self.longitude = lon
         self.name = name
-        self.space_type = space_type
+        self.space_type_id = space_type_id
         self.price = price
         self.description = description
         self.created = datetime.datetime.today()
+
+
+class ListingType(db.Model):
+    __tablename__ = "listing_types"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
