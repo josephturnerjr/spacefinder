@@ -152,9 +152,10 @@ def listing(listing_id):
 def admin():
     listings = Listing.query.all()
     accounts = Account.query.all()
+    listing_types = ListingType.query.all()
     unpublished = filter(lambda x: not x.published, listings)
     published = filter(lambda x: x.published, listings)
-    return render_template('admin.html', published=published, unpublished=unpublished, accounts=accounts)
+    return render_template('admin.html', published=published, unpublished=unpublished, accounts=accounts, types=listing_types)
 
 
 @views.route('/admin/listing/<int:listing_id>/publish')
@@ -268,5 +269,26 @@ def create_account():
         abort(500)
     account = Account(username, email, password)
     db.session.add(account)
+    db.session.commit()
+    return redirect('/admin')
+
+
+@views.route('/admin/listing_type/<int:listing_type_id>/delete')
+@requires_login
+def delete_listing_type(listing_type_id):
+    listing_type = ListingType.query.get(listing_type_id)
+    if listing_type:
+        db.session.delete(listing_type)
+        db.session.commit()
+    return redirect('/admin')
+
+@views.route('/admin/listing_type/create', methods=['POST'])
+@requires_login
+def create_listing_type():
+    name = request.form.get('name')
+    if not name:
+        abort(500)
+    listing_type = ListingType(name)
+    db.session.add(listing_type)
     db.session.commit()
     return redirect('/admin')

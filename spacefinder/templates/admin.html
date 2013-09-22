@@ -174,6 +174,49 @@
       </div>
     </div>
   </form>
+  <hr />
+  <h2>Manage listing types</h2>
+  <h3 class='muted'>Existing types</h3>
+  <table class='table table-bordered'>
+  <thead>
+    <tr>  
+      <th>
+        Listing type
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>  
+  </thead>
+  {% for type in types %}
+    <tr>  
+      <td>
+        {{type.name}}
+      </td>
+      <td>
+        <a href='/admin/listing_type/{{type.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete listing type'><i class='icon-trash'></i></a>
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+  <h3 class='muted'>Create new listing type</h3>
+  <form method='post' action='/admin/listing_type/create'>
+    <div class="control-group">
+      <span class="help-block"></span>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputName">Name</label>
+      <div class="controls">
+        <input type="text" id="inputName" placeholder="Name" name="name">
+        <span class="help-inline"></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Create listing type</button>
+      </div>
+    </div>
+  </form>
 </div>
 {% endblock %}
 {% block scripts %}
