@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>Submit a new listing</title>
+<meta name="description" content="Submit a new listing">
+    <link rel="stylesheet" href="/static/css/submit.css">
+{% endblock %}
+{% block body %}
+<div id="header" class='banner'>
+  <div class="container">
+    <h1>Submit a new listing</h1>
+    <p class='lead'>To submit a listing you need to get a <em>token</em>. Sign up to get a token below.</p>
+  </div>
+</div>
+<div class='submit'>
+  <div class="container">
+    <div class="row">
+      <div class="span4">
+        <form method='POST' action='/submit'>
+          <div class="control-group">
+            <span class="help-block"></span>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Your email address</label>
+            <div class="controls">
+              <input type="text" id="inputEmail" placeholder="example@example.com" name="email">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button id="lookup-address" type="submit" class="btn btn-primary">Get a token</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

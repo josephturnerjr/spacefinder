@@ -3,6 +3,7 @@ from spacefinder import app
 import datetime
 import md5
 from password import hash_pw
+from uuid import uuid4
 
 db = SQLAlchemy(app)
 
@@ -70,3 +71,16 @@ class ListingType(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+
+class SubmissionToken(db.Model):
+    __tablename__ = "submission_tokens"
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'))
+    listing = db.relationship('Listing')
+
+    def __init__(self, email):
+        self.email = email
+        self.key = str(uuid4())

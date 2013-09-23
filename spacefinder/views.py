@@ -1,7 +1,7 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
-from models import Listing, Account, ListingType, db
+from models import Listing, Account, ListingType, SubmissionToken, db
 from password import check_pw
 import sqlalchemy
 import json
@@ -65,25 +65,62 @@ def log_user_out():
     return redirect('/')
 
 
+@views.route('/submission/<token>')
+def submission(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if token.listing:
+        # If so, send to edit/delete admin page
+        return render_template('edit-listing.html',
+                                listing=token.listing, address=token.listing.address,
+                                lat=token.listing.latitude, lon=token.listing.longitude,
+                                name=token.listing.name, price=token.listing.price,
+                                space_type=token.listing.space_type,
+                                description=token.listing.description)
+    else:
+        return render_template('submit.html', token=token)
+
+
 @views.route('/submit')
-@views.route('/submit/step2')
 def submit():
-    return render_template('submit.html')
+    return render_template('get-token.html')
 
 
 @views.route('/submit', methods=['POST'])
-def submit_step1():
+def create_token():
+    email = request.form.get('email')
+    if not all([email]):
+        return redirect('/submit')
+    st = SubmissionToken(email)
+    db.session.add(st)
+    db.session.commit()
+    return render_template('token-thanks.html')
+
+
+@views.route('/submission/<token>/submit', methods=['POST'])
+def submit_step1(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
     address = request.form.get('formatted-address')
     lat = request.form.get('latitude')
     lon = request.form.get('longitude')
     if not all([address, lat, lon]):
         return redirect('/submit')
     listing_types = ListingType.query.all()
-    return render_template('submit2.html', types=listing_types, address=address, lat=lat, lon=lon)
+    return render_template('submit2.html', types=listing_types, address=address, lat=lat, lon=lon, token=token)
 
 
-@views.route('/submit/step2', methods=['POST'])
-def submit_step2():
+@views.route('/submission/<token>/submit/step2', methods=['POST'])
+def submit_step2(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
     address = request.form.get('address')
     lat = request.form.get('latitude')
     lon = request.form.get('longitude')
@@ -109,6 +146,7 @@ def submit_step2():
                                 address=address, lat=lat, lon=lon,
                                 name=name, price=price, space_type=space_type,
                                 description=description,
+                                token=token,
                                 error="All required fields must be filled in")
     try:
         price = float(price)
@@ -118,17 +156,22 @@ def submit_step2():
                                 address=address,
                                 lat=lat, lon=lon, name=name, price=price,
                                 space_type=space_type,
+                                token=token,
                                 description=description, error="Price must be a number")
     try:
-        create_listing(address, lat, lon, name, space_type, price, description)
+        listing = create_listing(address, lat, lon, name, space_type, price, description)
     except sqlalchemy.exc.IntegrityError:
         return render_template('submit2.html',
                                 types=listing_types,
                                 address=address, lat=lat,
                                 lon=lon, name=name, price=price,
+                                token=token,
                                 space_type=space_type,
                                 description=description,
                                 error="Space type must be one of meeting or office")
+    token.listing = listing
+    db.session.add(token)
+    db.session.commit()
     return render_template("thankyou.html")
 
 
@@ -136,6 +179,7 @@ def create_listing(address, lat, lon, name, space_type, price, description):
     listing = Listing(address, lat, lon, name, space_type, price, description)
     db.session.add(listing)
     db.session.commit()
+    return listing
 
 
 @views.route('/listing/<int:listing_id>')
