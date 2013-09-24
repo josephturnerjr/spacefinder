@@ -2,15 +2,16 @@ from spacefinder import app
 from flask import (Blueprint,
                    request,
                    redirect,
+                   url_for,
                    render_template,
                    session,
                    abort)
 from models import (Listing,
                     Account,
                     ListingType,
-                    db,
-                    get_space_type)
+                    db)
 from functools import wraps
+import helpers
 
 
 views = Blueprint('spacefinder_admin_views', __name__)
@@ -50,7 +51,7 @@ def publish(listing_id):
         listing.published = True
         db.session.add(listing)
         db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing/<int:listing_id>/unpublish')
@@ -61,7 +62,7 @@ def unpublish(listing_id):
         listing.published = False
         db.session.add(listing)
         db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing/<int:listing_id>/delete')
@@ -71,7 +72,7 @@ def delete_listing(listing_id):
     if listing:
         db.session.delete(listing)
         db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing/<int:listing_id>/edit')
@@ -87,50 +88,24 @@ def edit_listing(listing_id):
                                space_type=listing.space_type,
                                types=listing_types,
                                description=listing.description)
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing/<int:listing_id>/edit', methods=['POST'])
 @requires_login
 def edit_step_2(listing_id):
     listing = Listing.query.get(listing_id)
-    if not listing:
-        return redirect('/')
-    address = request.form.get('address')
-    lat = request.form.get('latitude')
-    lon = request.form.get('longitude')
-    if not all([address, lat, lon]):
-        return redirect('/submit')
-    space_type = get_space_type(request.form.get('space_type'))
-    if not space_type:
-        return redirect('/submit')
-    price = request.form.get('price')
-    description = request.form.get('description')
-    name = request.form.get('name')
     listing_types = ListingType.query.all()
-    if not all([space_type, price, name]):
-        return render_template('edit-listing.html',
-                               listing=listing, address=address, lat=lat,
-                               lon=lon, name=name, price=price,
-                               space_type=space_type, description=description,
-                               types=listing_types,
-                               error="All required fields must be filled in")
     try:
-        price = float(price)
-    except ValueError:
+        helpers.edit_listing(listing, request)
+    except helpers.FieldError, e:
         return render_template('edit-listing.html',
-                               listing=listing, address=address, lat=lat,
-                               lon=lon, name=name, price=price,
-                               space_type=space_type, description=description,
+                               listing=listing,
                                types=listing_types,
-                               error="Price must be a number")
-    listing.name = name
-    listing.space_type = space_type
-    listing.price = price
-    listing.description = description
-    db.session.add(listing)
-    db.session.commit()
-    return redirect('/')
+                               error=str(e))
+    except helpers.FormError, e:
+        return redirect('/submit')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/account/<int:account_id>/delete')
@@ -140,7 +115,7 @@ def delete_account(account_id):
     if account:
         db.session.delete(account)
         db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/account/create', methods=['POST'])
@@ -154,7 +129,7 @@ def create_account():
     account = Account(username, email, password)
     db.session.add(account)
     db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing_type/<int:listing_type_id>/delete')
@@ -164,7 +139,7 @@ def delete_listing_type(listing_type_id):
     if listing_type:
         db.session.delete(listing_type)
         db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing_type/create', methods=['POST'])
@@ -176,4 +151,4 @@ def create_listing_type():
     listing_type = ListingType(name)
     db.session.add(listing_type)
     db.session.commit()
-    return redirect('/')
+    return redirect(url_for('.admin'))

@@ -5,6 +5,7 @@ from models import (Listing, Account, ListingType,
                     SubmissionToken, db, get_space_type)
 from password import check_pw
 import sf_email
+import helpers
 
 
 views = Blueprint('spacefinder_views', __name__)
@@ -105,7 +106,7 @@ def view_submission(token):
         return redirect('/submit')
     # See if token has submitted
     if not token.listing:
-        return redirect('/submission/%s' % token)
+        return redirect('/submission/%s' % token.key)
     return render_template('listing.html', listing=token.listing)
 
 
@@ -116,7 +117,7 @@ def delete_submission(token):
         return redirect('/submit')
     # See if token has submitted
     if not token.listing:
-        return redirect('/submission/%s' % token)
+        return redirect('/submission/%s' % token.key)
     # Remove the listing and the token
     db.session.delete(token.listing)
     db.session.delete(token)
@@ -132,19 +133,38 @@ def edit_submission(token):
         return redirect('/submit')
     # See if token has submitted
     if not token.listing:
-        return redirect('/submission/%s' % token)
+        return redirect('/submission/%s' % token.key)
     # If so, send to edit/delete admin page
     listing_types = ListingType.query.all()
-    return render_template('edit-listing.html',
+    return render_template('edit-submission.html',
+                           token=token,
                            listing=token.listing,
-                           address=token.listing.address,
-                           lat=token.listing.latitude,
-                           lon=token.listing.longitude,
-                           name=token.listing.name,
-                           price=token.listing.price,
-                           space_type=token.listing.space_type,
-                           types=listing_types,
-                           description=token.listing.description)
+                           types=listing_types)
+
+
+@views.route('/submission/<token>/edit', methods=['POST'])
+def edit_submission_step2(token):
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token.key)
+    listing_types = ListingType.query.all()
+    try:
+        helpers.edit_listing(token.listing, request)
+    except helpers.FieldError, e:
+        return render_template('edit-submission.html',
+                               listing=token.listing,
+                               types=listing_types,
+                               error=str(e))
+    except helpers.FormError, e:
+        return redirect('/submit')
+    # On successful edit, requeue the listing for curation
+    token.listing.published = False
+    db.session.add(token.listing)
+    db.session.commit()
+    return redirect('/submission/%s' % token.key)
 
 
 @views.route('/submission/<token>/submit', methods=['POST'])
@@ -222,7 +242,7 @@ def submit_step2(token):
     token.listing = listing
     db.session.add(token)
     db.session.commit()
-    return render_template("thankyou.html")
+    return redirect("/submission/%s" % token.key)
 
 
 #Helpers
