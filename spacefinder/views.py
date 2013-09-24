@@ -93,20 +93,58 @@ def submission(token):
         return redirect('/submit')
     # See if token has submitted
     if token.listing:
-        # If so, send to edit/delete admin page
-        listing_types = ListingType.query.all()
-        return render_template('edit-listing.html',
-                               listing=token.listing,
-                               address=token.listing.address,
-                               lat=token.listing.latitude,
-                               lon=token.listing.longitude,
-                               name=token.listing.name,
-                               price=token.listing.price,
-                               space_type=token.listing.space_type,
-                               types=listing_types,
-                               description=token.listing.description)
+        return render_template('post-submission.html', token=token, listing=token.listing)
     else:
         return render_template('submit.html', token=token)
+
+
+@views.route('/submission/<token>/view')
+def view_submission(token):
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token)
+    return render_template('listing.html', listing=token.listing)
+
+
+@views.route('/submission/<token>/delete', methods=['POST'])
+def delete_submission(token):
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token)
+    # Remove the listing and the token
+    db.session.delete(token.listing)
+    db.session.delete(token)
+    db.session.commit()
+    return redirect('/')
+
+
+@views.route('/submission/<token>/edit')
+def edit_submission(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token)
+    # If so, send to edit/delete admin page
+    listing_types = ListingType.query.all()
+    return render_template('edit-listing.html',
+                           listing=token.listing,
+                           address=token.listing.address,
+                           lat=token.listing.latitude,
+                           lon=token.listing.longitude,
+                           name=token.listing.name,
+                           price=token.listing.price,
+                           space_type=token.listing.space_type,
+                           types=listing_types,
+                           description=token.listing.description)
 
 
 @views.route('/submission/<token>/submit', methods=['POST'])

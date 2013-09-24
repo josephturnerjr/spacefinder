@@ -53,12 +53,12 @@ class Listing(db.Model):
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, address, lat, lon, name, space_type_id, price, description):
+    def __init__(self, address, lat, lon, name, space_type, price, description):
         self.address = address
         self.latitude = lat
         self.longitude = lon
         self.name = name
-        self.space_type_id = space_type_id
+        self.space_type_id = space_type.id
         self.price = price
         self.description = description
         self.created = datetime.datetime.today()

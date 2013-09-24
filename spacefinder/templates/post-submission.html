@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block head %}
+    <title></title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/static/css/main.css">
+{% endblock %}
+{% block body %}
+<div class='container'>
+  <h1>Thank you for your submission</h1>
+  <p class='lead'>
+  Your listing has been submitted.
+  {% if listing.published %}
+  It has been reviewed and published.
+  {% else %}
+  It will be reviewed and published as soon as possible.
+  {% endif %}
+  </p>
+  <h3>Actions</h3>
+  <ul>
+    <li><a href="/submission/{{token.key}}/view">View your listing</a></li>
+    <li><a href="#">Edit your listing</a></li>
+    <li><a href="#" id='delete-submission'>Delete your listing</a></li>
+  </ul>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  $("#delete-submission").click(function(){
+    var answer = confirm("Are you sure you want to delete your submission? There is no undo, and you will have to get a new token to submit again.");
+    if(answer){
+      $.ajax({
+        type: 'POST',
+        url: '/submission/{{token.key}}/delete',
+        success:function(){
+          window.location.href = "/";
+        },
+      });
+    }
+    return false;
+  });
+</script>
+{% endblock %}
