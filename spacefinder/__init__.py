@@ -12,5 +12,7 @@ def page_not_found(error):
 
 
 from spacefinder.views import views
+from spacefinder.admin_views import views as admin_views
 from spacefinder.db_functions import init_db
 app.register_blueprint(views)
+app.register_blueprint(admin_views, url_prefix='/admin')

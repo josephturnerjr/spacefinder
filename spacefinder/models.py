@@ -46,7 +46,7 @@ class Listing(db.Model):
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(240), nullable=False)
     latitude = db.Column(db.String(16), nullable=False)
-    longitude = db.Column(db.String(16), nullable=False) 
+    longitude = db.Column(db.String(16), nullable=False)
     space_type_id = db.Column(db.Integer, db.ForeignKey('listing_types.id'), nullable=False)
     space_type = db.relationship("ListingType")
     price = db.Column(db.Float(), nullable=False)
@@ -84,3 +84,14 @@ class SubmissionToken(db.Model):
     def __init__(self, email):
         self.email = email
         self.key = str(uuid4())
+
+
+def get_space_type(type_id):
+    try:
+        # Check that we've received a valid type id
+        # Otherwise bogus form submission
+        space_type = int(type_id)
+        t = ListingType.query.get(space_type)
+        return t
+    except TypeError:
+        return None

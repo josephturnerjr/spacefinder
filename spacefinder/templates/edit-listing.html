@@ -30,8 +30,8 @@
         <label class="control-label" for="inputType">Space type *</label>
         <div class="controls">
           <select name="space_type" id="inputType">
-            {% for type in ["office", "meeting"] %}   
-              <option value='{{type}}' {% if type == space_type %}selected='selected'{%endif%}>{{type}}</option>
+            {% for type in types %}   
+              <option value='{{type.id}}' {% if type == space_type %}selected='selected'{%endif%}>{{type.name}}</option>
             {% endfor %}
           </select>
           <span class="help-inline"></span>
