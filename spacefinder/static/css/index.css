@@ -19,6 +19,9 @@ h5 {
 .navbar-static-top {
   border: 0;
 }
+.navbar {
+  color: white;
+}
 .navbar .navbar-inner {
   background: #b50900;
 }
