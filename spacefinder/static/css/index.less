@@ -1,5 +1,11 @@
+@md-nonprofit-red: #b50900;
 html, body{
   height: 100%;
+  font-family: Arial,sans-serif;
+}
+
+h1, h2, h3, h4, h5{
+  color: @md-nonprofit-red;
 }
 .container, .navbar-static-top .container, .navbar-fixed-top .container{
   width: 940px;
@@ -7,6 +13,23 @@ html, body{
 }
 .navbar-static-top{
   border: 0;
+}
+.navbar{
+  .navbar-inner{
+    background: #b50900;
+  }
+  .brand{
+    color: white;
+    text-shadow: none;
+  }
+  .nav{
+    >li{
+      >a{
+        color: white;
+        text-shadow: none;
+      }
+    }
+  }
 }
 .footer{
   padding: 15px 0;

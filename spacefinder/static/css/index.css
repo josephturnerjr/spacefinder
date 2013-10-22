@@ -1,6 +1,14 @@
 html,
 body {
   height: 100%;
+  font-family: Arial, sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #b50900;
 }
 .container,
 .navbar-static-top .container,
@@ -10,6 +18,17 @@ body {
 }
 .navbar-static-top {
   border: 0;
+}
+.navbar .navbar-inner {
+  background: #b50900;
+}
+.navbar .brand {
+  color: white;
+  text-shadow: none;
+}
+.navbar .nav > li > a {
+  color: white;
+  text-shadow: none;
 }
 .footer {
   padding: 15px 0;
