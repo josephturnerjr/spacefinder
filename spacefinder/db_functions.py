@@ -9,7 +9,7 @@ def init_db():
         t = ListingType(type_name)
         db.session.add(t)
         db.session.commit()
-        type_ids[type_name] = t.id
+        type_ids[type_name] = t
     db.session.add(Listing("1500 Union Ave #2500, Baltimore, MD",
                            "39.334497", "-76.64081",
                            "Headquarters for Maryland Nonprofits", type_ids["office"], 2500,
