@@ -12,7 +12,7 @@ http://%(domain)s/submission/%(token)s"""}
 
 def send_email(to_addr, subject, content, from_addr=FROM_EMAIL):
     r = requests.post(
-        "https://api.mailgun.net/v2/%s/messages" % app.config['DOMAIN'],
+        "https://api.mailgun.net/v2/%s/messages" % app.config.get('MAILGUN_DOMAIN', app.config['DOMAIN']),
         auth=("api", app.config['MAILGUN_API_KEY']),
         data={"from": from_addr,
               "to": [to_addr],

@@ -6,6 +6,9 @@ class Config(object):
     GOOGLE_ANALYTICS_API_KEY = 'YOUR_GA_API_KEY'  # Fill in your GA key
     GOOGLE_MAPS_API_KEY = 'YOUR_GM_API_KEY'  # Fill in your GM key
     MAILGUN_API_KEY = 'YOUR_MG_API_KEY'  # Fill in your mailgun key
+    # Optional; use a different domain for your Mailgun account
+    #   This will fall back to DOMAIN if unset
+    # MAILGUN_DOMAIN = example.mailgun.org
 
 
 class ProductionConfig(Config):
