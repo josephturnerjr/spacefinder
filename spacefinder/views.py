@@ -206,7 +206,7 @@ def submit_step2(token):
     description = request.form.get('description')
     name = request.form.get('name')
     listing_types = ListingType.query.all()
-    if not all([space_type, price, name]):
+    if not all([space_type, price, name, description]):
         return render_template('submit2.html',
                                types=listing_types,
                                address=address,
@@ -219,6 +219,8 @@ def submit_step2(token):
                                token=token,
                                error="All required fields must be filled in")
     try:
+        if price.startsWith('$'):
+            price = price[1:]
         price = float(price)
     except ValueError:
         return render_template('submit2.html',
