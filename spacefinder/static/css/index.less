@@ -9,6 +9,26 @@ html, body{
 h1, h2, h3, h4, h5{
   color: @md-nonprofit-red;
 }
+.heading{
+  background: white;
+  padding: 20px 0;
+  address{ 
+    text-align: right;
+  }
+  .sm-links{ 
+    font-size: 32px;
+    a{
+      text-decoration: none;
+      color: #666;
+      i{
+        margin: 0 20px;
+      }
+      &:hover{
+        color: @md-nonprofit-red;
+      }
+    }
+  }
+}
 
 .container, .navbar-static-top .container, .navbar-fixed-top .container{
   width: 940px;
@@ -20,7 +40,8 @@ h1, h2, h3, h4, h5{
 .navbar{
   color: white;
   .navbar-inner{
-    background: #b50900;
+    background: darken(@md-nonprofit-red, 15%);
+    border: 0;
   }
   .brand{
     color: white;

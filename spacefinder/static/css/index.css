@@ -12,6 +12,26 @@ h4,
 h5 {
   color: #b50900;
 }
+.heading {
+  background: white;
+  padding: 20px 0;
+}
+.heading address {
+  text-align: right;
+}
+.heading .sm-links {
+  font-size: 32px;
+}
+.heading .sm-links a {
+  text-decoration: none;
+  color: #666;
+}
+.heading .sm-links a i {
+  margin: 0 20px;
+}
+.heading .sm-links a:hover {
+  color: #b50900;
+}
 .container,
 .navbar-static-top .container,
 .navbar-fixed-top .container {
@@ -25,7 +45,8 @@ h5 {
   color: white;
 }
 .navbar .navbar-inner {
-  background: #b50900;
+  background: #690500;
+  border: 0;
 }
 .navbar .brand {
   color: white;
