@@ -39,6 +39,30 @@ class Account(db.Model):
         return '<User %r>' % self.username
 
 
+class Submitter(db.Model):
+    __tablename__ = "submitters"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    title = db.Column(db.String(24), nullable=False)
+    organization_name = db.Column(db.String(100), nullable=False)
+    organization_address = db.Column(db.String(500), nullable=False)
+    organization_type = db.Column(db.Enum('nonprofit', 'for-profit'), nullable=False)
+    mdnonprofit_member = db.Column(db.Boolean(), nullable=False)
+
+    def __init__(self, name, email, phone, title, orgname, orgaddr, orgtype, member):
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.title = title
+        self.organization_name = orgname
+        self.organization_address = orgaddr
+        self.organization_type = orgtype
+        self.mdnonprofit_member = member
+        self.token = SubmissionToken(email)
+
+
 class Listing(db.Model):
     __tablename__ = "listings"
     id = db.Column(db.Integer, primary_key=True)
@@ -80,6 +104,8 @@ class SubmissionToken(db.Model):
     email = db.Column(db.String(100), nullable=False)
     listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'))
     listing = db.relationship('Listing')
+    submitter_id = db.Column(db.Integer, db.ForeignKey('submitters.id'), nullable=False)
+    submitter = db.relationship('Submitter', backref=db.backref('token', uselist=False))
 
     def __init__(self, email):
         self.email = email

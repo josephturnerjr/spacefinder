@@ -1,7 +1,7 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
-from models import (Listing, Account, ListingType,
+from models import (Listing, Account, ListingType, Submitter, 
                     SubmissionToken, db, get_space_type)
 from password import check_pw
 import sf_email
@@ -75,13 +75,29 @@ def submit():
 @views.route('/submit', methods=['POST'])
 def create_token():
     email = request.form.get('email')
-    if not all([email]):
-        return redirect('/submit')
-    st = SubmissionToken(email)
-    db.session.add(st)
+    name = request.form.get('name')
+    phone = request.form.get('phone')
+    title = request.form.get('title')
+    orgname = request.form.get('orgname')
+    orgtype = request.form.get('orgtype')
+    member = request.form.get('member')
+    addr_parts = [request.form.get(x, '') for x in ['orgaddr1', 'orgaddr2', 'orgcity', 'orgstate', 'orgzip']]
+    if not all([email, name, phone, title, orgname, orgtype]) or not any(addr_parts):
+        return render_template('get-token.html', errors='All required fields must be filled in.')
+    member = member == "yes"
+    orgaddr = "\n".join(addr_parts)
+    submitter = Submitter(name,
+                          email,
+                          phone,
+                          title,
+                          orgname,
+                          orgaddr,
+                          orgtype,
+                          member)
+    db.session.add(submitter)
     db.session.commit()
     # send the email
-    sf_email.send_token(email, st.key)
+    sf_email.send_token(email, submitter.token.key)
     return render_template('token-thanks.html')
 
 

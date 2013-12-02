@@ -8,32 +8,93 @@
 <div id="header" class='banner'>
   <div class="container">
     <h1>Submit a new listing</h1>
-    <p class='lead'>Before you can create a new listing, we need to verify that you are a person (and not a robot). Please enter your email address below to receive a verification code that will allow you to submit a space listing.</p>
+    <p class='lead'>Before you can create a new listing, we would to know a little bit more about you (and verify that you are not a robot). Please enter your contact information below. A verification code allowing you to submit your space listing will be sent to the email address you provide.</p>
   </div>
 </div>
 <div class='submit'>
   <div class="container">
-    <div class="row">
-      <div class="span4">
-        <form method='POST' action='/submit'>
-          <div class="control-group">
-            <span class="help-block"></span>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="inputEmail">Your email address</label>
-            <div class="controls">
-              <input type="text" id="inputEmail" placeholder="example@example.com" name="email">
-              <span class="help-inline"></span>
-            </div>
-          </div>
-          <div class="control-group">
-            <div class="controls">
-              <button id="lookup-address" type="submit" class="btn btn-primary">Get your verification code</button>
-            </div>
-          </div>
-        </form>
+    <form class='form-horizontal' method='POST' action='/submit'>
+      <div class="control-group error">
+        <span class="help-block">{{errors or ""}}</span>
       </div>
-    </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">Contact Name *</label>
+        <div class="controls">
+          <input type="text" id="inputName" name="name">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputTitle">Title *</label>
+        <div class="controls">
+          <input type="text" id="inputTitle" name="title">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputOrgname">Organization Name *</label>
+        <div class="controls">
+          <input type="text" id="inputOrgname" name="orgname">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputOrgaddress">Organization Address *</label>
+        <div class="controls">
+          <input type="text" placeholder='Address line 1' name="orgaddr1"><br /><br/>
+          <input type="text" placeholder='Address line 2' name="orgaddr2"><br /><br/>
+          <input type="text" placeholder='City' name="orgcity"><br /><br/>
+          <input type="text" class='input-small' placeholder='State' name="orgstate">
+          <input type="text" class='input-small' placeholder='Zip code' name="orgzip">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Organization Type *</label>
+        <div class="controls">
+          <label class="radio">
+            <input type="radio" name="orgtype" id="optionsMemberYes" value="for-profit" checked>
+            For-profit
+          </label>
+          <label class="radio">
+            <input type="radio" name="orgtype" id="optionsMemberNo" value="nonprofit">
+            Nonprofit
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Maryland Nonprofits Member? *</label>
+        <div class="controls">
+          <label class="radio">
+            <input type="radio" name="member" id="optionsMemberYes" value="yes">
+            Yes
+          </label>
+          <label class="radio">
+            <input type="radio" name="member" id="optionsMemberNo" value="no" checked>
+            No
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Contact Email *</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="example@example.com" name="email">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPhone">Contact Phone *</label>
+        <div class="controls">
+          <input type="text" id="inputPhone" placeholder="555-555-5555" name="phone">
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button id="lookup-address" type="submit" class="btn btn-primary btn-large input-large">Get your verification code</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}
