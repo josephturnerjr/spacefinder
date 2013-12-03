@@ -8,6 +8,7 @@ from flask import (Blueprint,
                    abort)
 from models import (Listing,
                     Account,
+                    RateType, 
                     ListingType,
                     db)
 from functools import wraps
@@ -81,12 +82,14 @@ def edit_listing(listing_id):
     listing = Listing.query.get(listing_id)
     if listing:
         listing_types = ListingType.query.all()
+        rate_types = RateType.query.all()
         return render_template('edit-listing.html',
                                listing=listing, address=listing.address,
                                lat=listing.latitude, lon=listing.longitude,
                                name=listing.name, price=listing.price,
                                space_type=listing.space_type,
                                types=listing_types,
+                               rate_types=rate_types,
                                description=listing.description)
     return redirect(url_for('.admin'))
 
@@ -96,11 +99,13 @@ def edit_listing(listing_id):
 def edit_step_2(listing_id):
     listing = Listing.query.get(listing_id)
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
     try:
         helpers.edit_listing(listing, request)
     except helpers.FieldError, e:
         return render_template('edit-listing.html',
                                listing=listing,
+                               rate_types=rate_types,
                                types=listing_types,
                                error=str(e))
     except helpers.FormError, e:

@@ -74,15 +74,18 @@ class Listing(db.Model):
     space_type_id = db.Column(db.Integer, db.ForeignKey('listing_types.id'), nullable=False)
     space_type = db.relationship("ListingType")
     price = db.Column(db.Float(), nullable=False)
+    rate_type_id = db.Column(db.Integer, db.ForeignKey('rate_types.id'), nullable=False)
+    rate_type = db.relationship("RateType")
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, address, lat, lon, name, space_type, price, description):
+    def __init__(self, address, lat, lon, name, space_type, rate_type, price, description):
         self.address = address
         self.latitude = lat
         self.longitude = lon
         self.name = name
         self.space_type_id = space_type.id
+        self.rate_type_id = rate_type.id
         self.price = price
         self.description = description
         self.created = datetime.datetime.today()
@@ -95,6 +98,18 @@ class ListingType(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+
+class RateType(db.Model):
+    __tablename__ = "rate_types"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "<RateType: %s>" % self.name
 
 
 class SubmissionToken(db.Model):
@@ -118,6 +133,17 @@ def get_space_type(type_id):
         # Otherwise bogus form submission
         space_type = int(type_id)
         t = ListingType.query.get(space_type)
+        return t
+    except TypeError:
+        return None
+
+
+def get_rate_type(type_id):
+    try:
+        # Check that we've received a valid type id
+        # Otherwise bogus form submission
+        rate_type = int(type_id)
+        t = RateType.query.get(rate_type)
         return t
     except TypeError:
         return None

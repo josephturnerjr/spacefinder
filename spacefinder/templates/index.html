@@ -19,7 +19,7 @@
         Address
       </th>
       <th>
-        Price
+        Rate
       </th>
       <th>
         Space type 
@@ -38,7 +38,7 @@
         {{listing.address}}
       </td>
       <td>
-        {{listing.price|currency}}
+        {{listing.price|currency}} per {{listing.rate_type.name.lower()}}
       </td>
       <td>
         {{listing.space_type.name}}
@@ -67,7 +67,7 @@
       });
       draw_listing_map([
         {%for listing in listings %}
-          [{{listing.latitude}}, {{listing.longitude}}, "<h4>{{listing.name}}</h4><p class='muted'>{{listing.address}}</p><p><strong>Price: </strong> {{listing.price|currency}}</p><p><strong>Space type: </strong> {{listing.space_type.name}}</p><a href='/listing/{{listing.id}}'>Read more &raquo;</a>"],
+          [{{listing.latitude}}, {{listing.longitude}}, "<h4>{{listing.name}}</h4><p class='muted'>{{listing.address}}</p><p><strong>Rate: </strong> {{listing.price|currency}} per {{listing.rate_type.name.lower()}}</p><p><strong>Space type: </strong> {{listing.space_type.name}}</p><a href='/listing/{{listing.id}}'>Read more &raquo;</a>"],
         {% endfor %}
       ]);
   });

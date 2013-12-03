@@ -1,4 +1,4 @@
-from models import get_space_type, db
+from models import get_space_type, get_rate_type, db
 
 
 class FormError(Exception):
@@ -20,6 +20,9 @@ def edit_listing(listing, request):
     space_type = get_space_type(request.form.get('space_type'))
     if not space_type:
         raise FormError()
+    rate_type = get_rate_type(request.form.get('rate_type'))
+    if not rate_type:
+        raise FormError()
     price = request.form.get('price')
     description = request.form.get('description')
     name = request.form.get('name')
@@ -31,6 +34,7 @@ def edit_listing(listing, request):
         raise FieldError("Price must be a number")
     listing.name = name
     listing.space_type = space_type
+    listing.rate_type = rate_type
     listing.price = price
     listing.description = description
     db.session.add(listing)

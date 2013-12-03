@@ -38,9 +38,15 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="inputPrice">Price *</label>
+        <label class="control-label" for="inputPrice">Rate *</label>
         <div class="controls">
-          <input type="text" value="{{listing.price}}" name="price" id="inputPrice" placeholder="100">
+          <input type="text" value="{{listing.price}}" name="price" id="inputPrice" placeholder="100"> per
+          <select name="rate_type" id="inputRate">
+            {% for type in rate_types %}   
+              <option value='{{type.id}}' {% if type == listing.rate_type %}selected='selected'{%endif%}>{{type.name}}</option>
+            {% endfor %}
+          </select>
+
           <span class="help-inline"></span>
         </div>
       </div>

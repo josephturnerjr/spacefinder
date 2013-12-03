@@ -12,7 +12,7 @@
       <h3 class='muted'>{{listing.address}}</h3>
       <hr />
       <p>
-        <strong>Price: </strong> {{listing.price|currency}}
+        <strong>Rate: </strong> {{listing.price|currency}} per {{listing.rate_type.name.lower()}}
       </p>
       <p>
         <strong>Type of space: </strong> {{listing.space_type.name}}

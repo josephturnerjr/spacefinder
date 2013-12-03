@@ -17,7 +17,7 @@
         Address
       </th>
       <th>
-        Price
+        Rate 
       </th>
       <th>
         Description
@@ -42,7 +42,7 @@
         {{listing.address}}
       </td>
       <td>
-        {{listing.price|currency}}
+        {{listing.price|currency}} per {{listing.rate_type.name.lower()}}
       </td>
       <td>
         <span class='description'>{{listing.description}}</span>
@@ -73,7 +73,7 @@
         Address
       </th>
       <th>
-        Price
+        Rate 
       </th>
       <th>
         Description
@@ -98,7 +98,7 @@
         {{listing.address}}
       </td>
       <td>
-        {{listing.price|currency}}
+        {{listing.price|currency}} per {{listing.rate_type.name.lower()}}
       </td>
       <td>
         <span class='description'>{{listing.description}}</span>

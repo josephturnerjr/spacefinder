@@ -1,8 +1,8 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort)
-from models import (Listing, Account, ListingType, Submitter, 
-                    SubmissionToken, db, get_space_type)
+from models import (Listing, Account, ListingType, Submitter, RateType,
+                    SubmissionToken, db, get_space_type, get_rate_type)
 from password import check_pw
 import sf_email
 import helpers
@@ -98,6 +98,7 @@ def create_token():
     db.session.commit()
     # send the email
     sf_email.send_token(email, submitter.token.key)
+    print "/submission/%s" % submitter.token.key
     return render_template('token-thanks.html')
 
 
@@ -152,9 +153,11 @@ def edit_submission(token):
         return redirect('/submission/%s' % token.key)
     # If so, send to edit/delete admin page
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
     return render_template('edit-submission.html',
                            token=token,
                            listing=token.listing,
+                           rate_types=rate_types,
                            types=listing_types)
 
 
@@ -167,11 +170,13 @@ def edit_submission_step2(token):
     if not token.listing:
         return redirect('/submission/%s' % token.key)
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
     try:
         helpers.edit_listing(token.listing, request)
     except helpers.FieldError, e:
         return render_template('edit-submission.html',
                                listing=token.listing,
+                               rate_types=rate_types,
                                types=listing_types,
                                error=str(e))
     except helpers.FormError, e:
@@ -195,11 +200,13 @@ def submit_step1(token):
     if not all([address, lat, lon]):
         return redirect('/submit')
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
     return render_template('submit2.html',
                            types=listing_types,
                            address=address,
                            lat=lat,
                            lon=lon,
+                           rate_types=rate_types,
                            token=token)
 
 
@@ -218,10 +225,14 @@ def submit_step2(token):
     space_type = get_space_type(request.form.get('space_type'))
     if not space_type:
         return redirect('/submit')
+    rate_type = get_rate_type(request.form.get('rate_type'))
+    if not rate_type:
+        return redirect('/submit')
     price = request.form.get('price')
     description = request.form.get('description')
     name = request.form.get('name')
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
     if not all([space_type, price, name, description]):
         return render_template('submit2.html',
                                types=listing_types,
@@ -232,10 +243,11 @@ def submit_step2(token):
                                price=price,
                                space_type=space_type,
                                description=description,
+                               rate_types=rate_types,
                                token=token,
                                error="All required fields must be filled in")
     try:
-        if price.startsWith('$'):
+        if price.startswith('$'):
             price = price[1:]
         price = float(price)
     except ValueError:
@@ -248,6 +260,7 @@ def submit_step2(token):
                                price=price,
                                space_type=space_type,
                                token=token,
+                               rate_types=rate_types,
                                description=description,
                                error="Price must be a number")
     listing = create_listing(address,
@@ -255,6 +268,7 @@ def submit_step2(token):
                              lon,
                              name,
                              space_type,
+                             rate_type,
                              price,
                              description)
     token.listing = listing
@@ -264,8 +278,8 @@ def submit_step2(token):
 
 
 #Helpers
-def create_listing(address, lat, lon, name, space_type, price, description):
-    listing = Listing(address, lat, lon, name, space_type, price, description)
+def create_listing(address, lat, lon, name, space_type, rate_type, price, description):
+    listing = Listing(address, lat, lon, name, space_type, rate_type, price, description)
     db.session.add(listing)
     db.session.commit()
     return listing
