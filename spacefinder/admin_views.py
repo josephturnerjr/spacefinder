@@ -8,7 +8,8 @@ from flask import (Blueprint,
                    abort)
 from models import (Listing,
                     Account,
-                    RateType, 
+                    RateType,
+                    Submitter,
                     ListingType,
                     db)
 from functools import wraps
@@ -35,12 +36,16 @@ def admin():
     listings = Listing.query.all()
     accounts = Account.query.all()
     listing_types = ListingType.query.all()
+    rate_types = RateType.query.all()
+    submitters = Submitter.query.all()
     unpublished = filter(lambda x: not x.published, listings)
     published = filter(lambda x: x.published, listings)
     return render_template('admin.html',
                            published=published,
                            unpublished=unpublished,
                            accounts=accounts,
+                           rate_types=rate_types,
+                           submitters=submitters,
                            types=listing_types)
 
 
@@ -140,20 +145,42 @@ def create_account():
 @views.route('/listing_type/<int:listing_type_id>/delete')
 @requires_login
 def delete_listing_type(listing_type_id):
-    listing_type = ListingType.query.get(listing_type_id)
-    if listing_type:
-        db.session.delete(listing_type)
-        db.session.commit()
-    return redirect(url_for('.admin'))
+    return delete_named_item(ListingType, listing_type_id)
 
 
 @views.route('/listing_type/create', methods=['POST'])
 @requires_login
 def create_listing_type():
+    return create_named_item(ListingType)
+
+
+@views.route('/rate_type/<int:type_id>/delete')
+@requires_login
+def delete_rate_type(type_id):
+    return delete_named_item(RateType, type_id)
+
+
+@views.route('/rate_type/create', methods=['POST'])
+@requires_login
+def create_rate_type():
+    return create_named_item(RateType)
+
+
+def delete_named_item(item_class, item_id, redirect_url=None):
+    redirect_url = redirect_url or url_for('.admin')
+    item = item_class.query.get(item_id)
+    if item:
+        db.session.delete(item)
+        db.session.commit()
+    return redirect(redirect_url)
+
+
+def create_named_item(item_class, redirect_url=None):
+    redirect_url = redirect_url or url_for('.admin')
     name = request.form.get('name')
     if not name:
         abort(500)
-    listing_type = ListingType(name)
-    db.session.add(listing_type)
+    item = item_class(name)
+    db.session.add(item)
     db.session.commit()
-    return redirect(url_for('.admin'))
+    return redirect(redirect_url)

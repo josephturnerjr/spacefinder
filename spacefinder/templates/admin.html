@@ -117,6 +117,68 @@
     </tr>  
   {% endfor %}
   </table>
+<!-- Submitters -->
+  <hr />
+  <h2>Submitters</h2>
+  <table class='table table-bordered listing-table'>
+  <thead>
+    <tr>  
+      <th>
+        Name 
+      </th>
+      <th>
+        Title 
+      </th>
+      <th>
+        Email 
+      </th>
+      <th>
+        Phone 
+      </th>
+      <th>
+        Organization
+      </th>
+      <th>
+        Org. Address
+      </th>
+      <th>
+        Org. Type
+      </th>
+      <th>
+        Member?
+      </th>
+    </tr>  
+  </thead>
+  {% for submitter in submitters %}
+    <tr>  
+      <td>
+        {{submitter.name}}
+      </td>
+      <td>
+        {{submitter.title}}
+      </td>
+      <td>
+        {{submitter.email}}
+      </td>
+      <td>
+        {{submitter.phone}}
+      </td>
+      <td>
+        {{submitter.organization}}
+      </td>
+      <td>
+        {{submitter.organization_address}}
+      </td>
+      <td>
+        {{submitter.organization_type}}
+      </td>
+      <td>
+        {{submitter.mdnonprofit_member}}
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+<!-- Admin-only stuffs -->
   <hr />
   <h2>Manage accounts</h2>
   <h3 class='muted'>Existing accounts</h3>
@@ -214,6 +276,49 @@
     <div class="control-group">
       <div class="controls">
         <button type="submit" class="btn btn-primary">Create listing type</button>
+      </div>
+    </div>
+  </form>
+  <hr />
+  <h2>Manage rental rate types</h2>
+  <h3 class='muted'>Existing types</h3>
+  <table class='table table-bordered'>
+  <thead>
+    <tr>  
+      <th>
+        Rate type
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>  
+  </thead>
+  {% for type in rate_types %}
+    <tr>  
+      <td>
+        {{type.name}}
+      </td>
+      <td>
+        <a href='/admin/rate_type/{{type.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete rate type'><i class='icon-trash'></i></a>
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+  <h3 class='muted'>Create new rate type</h3>
+  <form method='post' action='/admin/rate_type/create'>
+    <div class="control-group">
+      <span class="help-block"></span>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputName">Name</label>
+      <div class="controls">
+        <input type="text" id="inputName" placeholder="Name" name="name">
+        <span class="help-inline"></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Create rate type</button>
       </div>
     </div>
   </form>

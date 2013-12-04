@@ -82,7 +82,7 @@ def create_token():
     orgtype = request.form.get('orgtype')
     member = request.form.get('member')
     addr_parts = [request.form.get(x, '') for x in ['orgaddr1', 'orgaddr2', 'orgcity', 'orgstate', 'orgzip']]
-    if not all([email, name, phone, title, orgname, orgtype]) or not any(addr_parts):
+    if not all([email, name, orgname, orgtype]) or not any(addr_parts):
         return render_template('get-token.html', errors='All required fields must be filled in.')
     member = member == "yes"
     orgaddr = "\n".join(addr_parts)
