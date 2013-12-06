@@ -6,6 +6,7 @@ from models import (Listing, Account, ListingType, Submitter, RateType,
 from password import check_pw
 import sf_email
 import helpers
+import datetime
 
 
 views = Blueprint('spacefinder_views', __name__)
@@ -19,7 +20,7 @@ def format_currency(value):
 # Browsing (public) functions
 @views.route('/')
 def index():
-    listings = Listing.query.filter_by(published=True).all()
+    listings = Listing.query.filter_by(expired=False).filter_by(published=True).all()
     locations = [[float(l.latitude), float(l.longitude), l.name] for l in listings]
     return render_template('index.html', listings=listings, locations = locations)
 
@@ -28,7 +29,6 @@ def index():
 def listing(listing_id):
     listing = Listing.query.get_or_404(listing_id)
     if not (listing.published or session.get('session_id')):
-        print "abortin"
         abort(404)
     return render_template('listing.html', listing=listing)
 
@@ -111,7 +111,11 @@ def submission(token):
         return redirect('/submit')
     # See if token has submitted
     if token.listing:
-        return render_template('post-submission.html', token=token, listing=token.listing)
+        expires = token.listing.expires - datetime.datetime.utcnow()
+        return render_template('post-submission.html',
+                               token=token,
+                               listing=token.listing,
+                               expire_days=expires.days)
     else:
         return render_template('submit.html', token=token)
 
@@ -125,6 +129,19 @@ def view_submission(token):
     if not token.listing:
         return redirect('/submission/%s' % token.key)
     return render_template('listing.html', listing=token.listing)
+
+
+@views.route('/submission/<token>/renew')
+def renew_submission(token):
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token.key)
+    if token.listing.expired:
+        helpers.renew_listing(token.listing)
+    return redirect('/submission/%s' % token.key)
 
 
 @views.route('/submission/<token>/delete', methods=['POST'])

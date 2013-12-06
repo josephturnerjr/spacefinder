@@ -33,20 +33,33 @@ def requires_login(f):
 @views.route('/')
 @requires_login
 def admin():
+    # Lazy expiration of listings
+    helpers.expire_listings()
     listings = Listing.query.all()
     accounts = Account.query.all()
     listing_types = ListingType.query.all()
     rate_types = RateType.query.all()
     submitters = Submitter.query.all()
-    unpublished = filter(lambda x: not x.published, listings)
-    published = filter(lambda x: x.published, listings)
+    unpublished = filter(lambda x: not x.published and not x.expired, listings)
+    published = filter(lambda x: x.published and not x.expired, listings)
+    expired = filter(lambda x: x.expired, listings)
     return render_template('admin.html',
                            published=published,
                            unpublished=unpublished,
+                           expired=expired,
                            accounts=accounts,
                            rate_types=rate_types,
                            submitters=submitters,
                            types=listing_types)
+
+
+@views.route('/listing/<int:listing_id>/renew')
+@requires_login
+def renew(listing_id):
+    listing = Listing.query.get(listing_id)
+    if listing:
+        helpers.renew_listing(listing)
+    return redirect(url_for('.admin'))
 
 
 @views.route('/listing/<int:listing_id>/publish')

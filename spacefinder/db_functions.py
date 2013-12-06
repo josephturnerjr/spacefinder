@@ -16,19 +16,19 @@ def init_db():
         db.session.add(t)
         db.session.commit()
         rate_type_ids[type_name] = t
-    db.session.add(Listing("1500 Union Ave #2500, Baltimore, MD",
-                           "39.334497", "-76.64081",
-                           "Headquarters for Maryland Nonprofits", type_ids["office"], 2500,
-                           """Set in beautiful downtown Baltimore, this is the perfect space for you.
+    db.session.add(Listing(address="1500 Union Ave #2500, Baltimore, MD",
+                           lat="39.334497", lon="-76.64081",
+                           name="Headquarters for Maryland Nonprofits", space_type=type_ids["office"], price=2500,
+                           description="""Set in beautiful downtown Baltimore, this is the perfect space for you.
 
 1800 sq ft., with spacious meeting rooms.
 
 Large windows, free wifi, free parking, quiet neighbors.""", rate_type=rate_type_ids['Month']))
-    db.session.add(Listing("6695 Dobbin Rd, Columbia, MD",
-                           "39.186198", "-76.824842",
-                           "Frisco Taphouse and Brewery", type_ids["meeting"], 1700,
-                           """Large open space in a quiet subdivision near Columbia.
+    db.session.add(Listing(address="6695 Dobbin Rd, Columbia, MD",
+                           lat="39.186198", lon="-76.824842",
+                           name="Frisco Taphouse and Brewery", space_type=type_ids["meeting"], price=1700,
+                           description="""Large open space in a quiet subdivision near Columbia.
 
-High ceilings, lots of parking, good beer selection.""", rate_type=rate_type_ids['Day']))
+High ceilings, lots of parking, good beer selection.""", rate_type=rate_type_ids['Day'], expires_in_days=-1))
     db.session.add(Account("admin", "example@example.com", "Pass1234"))
     db.session.commit()

@@ -78,8 +78,10 @@ class Listing(db.Model):
     rate_type = db.relationship("RateType")
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
+    expires = db.Column(db.DateTime, nullable=False)
+    expired = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, address, lat, lon, name, space_type, rate_type, price, description):
+    def __init__(self, address, lat, lon, name, space_type, rate_type, price, description, expires_in_days=90):
         self.address = address
         self.latitude = lat
         self.longitude = lon
@@ -89,6 +91,7 @@ class Listing(db.Model):
         self.price = price
         self.description = description
         self.created = datetime.datetime.today()
+        self.expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_in_days)
 
 
 class ListingType(db.Model):
@@ -110,6 +113,22 @@ class RateType(db.Model):
 
     def __repr__(self):
         return "<RateType: %s>" % self.name
+
+"""
+It's unclear whether this is necessary or not
+
+class ExpirationTimeframe(db.Model):
+    __tablename__ = "expiration_timeframes"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    days = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "<ExpirationTimeframe: %s (%s days)>" % (self.name, self.days)
+"""
 
 
 class SubmissionToken(db.Model):

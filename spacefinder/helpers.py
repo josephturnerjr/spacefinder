@@ -1,4 +1,5 @@
-from models import get_space_type, get_rate_type, db
+from models import Listing, get_space_type, get_rate_type, db
+import datetime
 
 
 class FormError(Exception):
@@ -37,5 +38,17 @@ def edit_listing(listing, request):
     listing.rate_type = rate_type
     listing.price = price
     listing.description = description
+    db.session.add(listing)
+    db.session.commit()
+
+
+def expire_listings():
+    Listing.query.filter(Listing.expires <= datetime.datetime.utcnow()).update({'expired': True})
+    db.session.commit()
+
+
+def renew_listing(listing, expires_in_days=90):
+    listing.expired = False
+    listing.expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_in_days)
     db.session.add(listing)
     db.session.commit()

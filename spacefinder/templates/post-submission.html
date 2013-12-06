@@ -8,13 +8,20 @@
 <div class='container'>
   <h1>Thank you for your submission</h1>
   <p class='lead'>
-  Your listing has been submitted.
-  {% if listing.published %}
-  It has been reviewed and published.
+  {% if listing.expired %}
+    Your listing has expired. <a href='/submission/{{token.key}}/renew' class='btn btn-primary'>Renew your listing</a>
   {% else %}
-  It will be reviewed and published as soon as possible.
+    Your listing has been submitted.
+    {% if listing.published %}
+    It has been reviewed and published.
+    {% else %}
+    It will be reviewed and published as soon as possible.
+    {% endif %}
   {% endif %}
   </p>
+  {% if not listing.expired %}
+    <p class='text-error'>Your listing will expire in {{expire_days}} days.</p>
+  {% endif %}
   <h3>Actions</h3>
   <ul>
     <li><a href="/submission/{{token.key}}/view">View your listing</a></li>

@@ -117,6 +117,62 @@
     </tr>  
   {% endfor %}
   </table>
+  <hr/>
+  <h2>Expired listings</h2>
+  <table class='table table-bordered listing-table'>
+  <thead>
+    <tr>  
+      <th>
+        Property
+      </th>
+      <th>
+        Address
+      </th>
+      <th>
+        Rate 
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Space type 
+      </th>
+      <th>
+        Submitted on 
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>  
+  </thead>
+  {% for listing in expired %}
+    <tr>  
+      <td>
+        <a href='/listing/{{listing.id}}'>{{listing.name}}</a>
+      </td>
+      <td>
+        {{listing.address}}
+      </td>
+      <td>
+        {{listing.price|currency}} per {{listing.rate_type.name.lower()}}
+      </td>
+      <td>
+        <span class='description'>{{listing.description}}</span>
+      </td>
+      <td>
+        {{listing.space_type.name}}
+      </td>
+      <td>
+        {{listing.created.date()}}
+      </td>
+      <td>
+        <a href='/admin/listing/{{listing.id}}/renew' data-toggle='tooltip' data-placement='bottom' title='Renew listing'><i class='icon-time'></i></a>&nbsp;
+        <a href='/admin/listing/{{listing.id}}/edit' data-toggle='tooltip' data-placement='bottom' title='Edit listing'><i class='icon-pencil'></i></a>&nbsp;
+        <a href='/admin/listing/{{listing.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete listing'><i class='icon-trash'></i></a>
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
 <!-- Submitters -->
   <hr />
   <h2>Submitters</h2>
