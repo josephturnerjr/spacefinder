@@ -250,6 +250,7 @@ def submit_step2(token):
     name = request.form.get('name')
     listing_types = ListingType.query.all()
     rate_types = RateType.query.all()
+    expires_in_days = request.form.get('expires_in_days')
     if not all([space_type, price, name, description]):
         return render_template('submit2.html',
                                types=listing_types,
@@ -264,10 +265,17 @@ def submit_step2(token):
                                token=token,
                                error="All required fields must be filled in")
     try:
-        if price.startswith('$'):
-            price = price[1:]
-        price = float(price)
-    except ValueError:
+        try:
+            if price.startswith('$'):
+                price = price[1:]
+            price = float(price)
+        except:
+            raise Exception("Price must be a number")
+        try:
+            expires_in_days = int(expires_in_days)
+        except:
+            raise Exception("Expiration must be a number of days")
+    except Exception, e:
         return render_template('submit2.html',
                                types=listing_types,
                                address=address,
@@ -279,7 +287,7 @@ def submit_step2(token):
                                token=token,
                                rate_types=rate_types,
                                description=description,
-                               error="Price must be a number")
+                               error=str(e))
     listing = create_listing(address,
                              lat,
                              lon,
@@ -287,7 +295,8 @@ def submit_step2(token):
                              space_type,
                              rate_type,
                              price,
-                             description)
+                             description,
+                             expires_in_days)
     token.listing = listing
     db.session.add(token)
     db.session.commit()
@@ -295,8 +304,24 @@ def submit_step2(token):
 
 
 #Helpers
-def create_listing(address, lat, lon, name, space_type, rate_type, price, description):
-    listing = Listing(address, lat, lon, name, space_type, rate_type, price, description)
+def create_listing(address,
+                   lat,
+                   lon,
+                   name,
+                   space_type,
+                   rate_type,
+                   price,
+                   description,
+                   expires_in_days=90):
+    listing = Listing(address,
+                      lat,
+                      lon,
+                      name,
+                      space_type,
+                      rate_type,
+                      price,
+                      description,
+                      expires_in_days)
     db.session.add(listing)
     db.session.commit()
     return listing

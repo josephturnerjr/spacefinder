@@ -33,8 +33,6 @@ def requires_login(f):
 @views.route('/')
 @requires_login
 def admin():
-    # Lazy expiration of listings
-    helpers.expire_listings()
     listings = Listing.query.all()
     accounts = Account.query.all()
     listing_types = ListingType.query.all()

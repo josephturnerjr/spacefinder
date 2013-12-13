@@ -42,13 +42,7 @@ def edit_listing(listing, request):
     db.session.commit()
 
 
-def expire_listings():
-    Listing.query.filter(Listing.expires <= datetime.datetime.utcnow()).update({'expired': True})
-    db.session.commit()
-
-
 def renew_listing(listing, expires_in_days=90):
-    listing.expired = False
     listing.expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_in_days)
     db.session.add(listing)
     db.session.commit()

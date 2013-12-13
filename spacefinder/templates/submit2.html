@@ -24,7 +24,7 @@
         <label class="control-label" for="inputName">Name *</label>
         <div class="controls">
           <input type='text' name="name" maxlength="100" id="inputName" value="{{name}}" placeholder="Quiet space near the water"></textarea>
-          <span class="help-inline">This name will appear in user searches, so make it descriptive. (max 100 characters)</span>
+          <span class="help-inline">This name will appear in user searches, so make it descriptive. (100 characters max)</span>
         </div>
       </div>
       <div class="control-group">
@@ -54,6 +54,18 @@
         <label class="control-label" for="inputDescription">Description (1500 characters max) *</label>
         <div class="controls">
           <textarea name="description" id="inputDescription" class='span5' maxlength='1500' rows="10" cols="40" placeholder="Suggestions: size, amenities, parking, shared/private space, wifi/internet access, availability, etc. Use this description to sell your space!">{{description}}</textarea>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <hr />
+      <div class="control-group">
+        <label class="control-label" for="inputDescription">How long should your listing stay active?</label>
+        <div class="controls">
+          <select name="expires_in_days" id="expiration">
+            {% for days in [15, 30, 90, 180, 365] %}   
+              <option value='{{days}}' {% if days == 90 %}selected='selected'{%endif%}>{{days}} days</option>
+            {% endfor %}
+          </select>
           <span class="help-inline"></span>
         </div>
       </div>

@@ -4,6 +4,7 @@ import datetime
 import md5
 from password import hash_pw
 from uuid import uuid4
+from sqlalchemy.ext.hybrid import hybrid_property
 
 db = SQLAlchemy(app)
 
@@ -79,7 +80,6 @@ class Listing(db.Model):
     description = db.Column(db.Text(), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     expires = db.Column(db.DateTime, nullable=False)
-    expired = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(self, address, lat, lon, name, space_type, rate_type, price, description, expires_in_days=90):
         self.address = address
@@ -92,6 +92,10 @@ class Listing(db.Model):
         self.description = description
         self.created = datetime.datetime.today()
         self.expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_in_days)
+
+    @hybrid_property
+    def expired(self):
+        return self.expires <= datetime.datetime.utcnow()
 
 
 class ListingType(db.Model):
