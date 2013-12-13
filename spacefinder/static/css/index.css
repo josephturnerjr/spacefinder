@@ -38,6 +38,11 @@ h5 {
   width: 940px;
   padding: 0 30px;
 }
+.container p.pull-right,
+.navbar-static-top .container p.pull-right,
+.navbar-fixed-top .container p.pull-right {
+  margin-left: 10px;
+}
 .navbar-static-top {
   border: 0;
 }
@@ -51,10 +56,30 @@ h5 {
 .navbar .brand {
   color: white;
   text-shadow: none;
+  padding: 20px;
+}
+.navbar .nav {
+  margin-top: 12px;
 }
 .navbar .nav > li > a {
   color: white;
   text-shadow: none;
+}
+.navbar .nav > li > a:hover {
+  color: #ffc025;
+}
+.navbar .btn {
+  margin-top: 12px;
+  background: #ffc025;
+  text-shadow: none;
+  font-weight: bold;
+  border: 1px solid #ffecbe;
+  font-style: italic;
+  color: #583f00;
+  line-height: 30px;
+}
+.navbar p {
+  margin-top: 12px;
 }
 .footer {
   padding: 15px 0;

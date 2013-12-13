@@ -41,12 +41,12 @@
       <div class="navbar-inner">
       <div class='container'>
         <a class="brand" href="/">Nonprofit Space Finder</a>
-        <a class='btn' href="/submit">Click to submit a listing</a>
           {% if not session["session_id"] %}
+            <a class='btn pull-right' href="/submit">Click to submit a listing</a>
             <ul class='nav pull-right'>
-              <li><a href="/login">Log in</a></li>
             </ul>
           {% else %}
+            <a class='btn' href="/submit">Click to submit a listing</a>
             <ul class='nav pull-right action-nav'>
               <li><a href='/admin' data-toggle='tooltip' data-placement='bottom' title='Go to your dashboard'><i class='icon-dashboard'></i></a></li>
               <li class='divider'></li>
@@ -64,7 +64,7 @@
     <div class='footer'>
       <div class='container'>
           <p class='pull-left'>Copyright &copy; 2013 Maryland Nonprofits
-          <p class='pull-right'><a href='/contact'>Contact us</a></p>
+          <p class='pull-right'><a href='/contact'>Contact us</a> | <a href="/login">Log in</a></p>
       </div>
     </div>
     {% endblock %}
