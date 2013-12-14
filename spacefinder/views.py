@@ -17,6 +17,19 @@ def format_currency(value):
     return "${:,.0f}".format(value)
 
 
+@app.template_filter('safe_email')
+def format_safe_email(email):
+    return email.replace("@", " (at) ").replace(".", " (dot) ")
+
+
+@app.template_filter('phone')
+def format_phone_number(phone):
+    if len(phone) == 7:
+        return "%s - %s" % (phone[:3], phone[3:])
+    elif len(phone) == 10:
+        return "(%s) %s - %s" % (phone[:3], phone[3:6], phone[6:])
+
+
 # Browsing (public) functions
 @views.route('/')
 def index():
@@ -251,7 +264,10 @@ def submit_step2(token):
     listing_types = ListingType.query.all()
     rate_types = RateType.query.all()
     expires_in_days = request.form.get('expires_in_days')
-    if not all([space_type, price, name, description]):
+    ada_accessible = request.form.get('ada_accessible')
+    contact_phone = request.form.get('contact_phone')
+    contact_email = request.form.get('contact_email')
+    if not all([space_type, price, name, description, contact_phone]):
         return render_template('submit2.html',
                                types=listing_types,
                                address=address,
@@ -288,40 +304,28 @@ def submit_step2(token):
                                rate_types=rate_types,
                                description=description,
                                error=str(e))
-    listing = create_listing(address,
-                             lat,
-                             lon,
-                             name,
-                             space_type,
-                             rate_type,
-                             price,
-                             description,
-                             expires_in_days)
+    if ada_accessible == "no":
+        ada_accessible = False
+    else:
+        ada_accessible = True
+    listing = Listing(address=address,
+                      lat=lat,
+                      lon=lon,
+                      name=name,
+                      space_type=space_type,
+                      rate_type=rate_type,
+                      price=price,
+                      description=description,
+                      ada_accessible=ada_accessible,
+                      contact_email=contact_email,
+                      contact_phone=contact_phone,
+                      expires_in_days=expires_in_days)
+    db.session.add(listing)
+    db.session.commit()
     token.listing = listing
     db.session.add(token)
     db.session.commit()
     return redirect("/submission/%s" % token.key)
 
 
-#Helpers
-def create_listing(address,
-                   lat,
-                   lon,
-                   name,
-                   space_type,
-                   rate_type,
-                   price,
-                   description,
-                   expires_in_days=90):
-    listing = Listing(address,
-                      lat,
-                      lon,
-                      name,
-                      space_type,
-                      rate_type,
-                      price,
-                      description,
-                      expires_in_days)
-    db.session.add(listing)
-    db.session.commit()
     return listing

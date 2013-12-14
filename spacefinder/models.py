@@ -68,7 +68,10 @@ class Listing(db.Model):
     __tablename__ = "listings"
     id = db.Column(db.Integer, primary_key=True)
     published = db.Column(db.Boolean(), default=False, nullable=False)
+    ada_accessible = db.Column(db.Boolean(), default=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    contact_phone = db.Column(db.String(16), nullable=False)
+    contact_email = db.Column(db.String(100))
     address = db.Column(db.String(240), nullable=False)
     latitude = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.String(16), nullable=False)
@@ -81,14 +84,29 @@ class Listing(db.Model):
     created = db.Column(db.DateTime, nullable=False)
     expires = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, address, lat, lon, name, space_type, rate_type, price, description, expires_in_days=90):
+    def __init__(self,
+                 address,
+                 lat,
+                 lon,
+                 name,
+                 space_type,
+                 rate_type,
+                 price,
+                 description,
+                 contact_phone,
+                 contact_email=None,
+                 ada_accessible=True,
+                 expires_in_days=90):
         self.address = address
         self.latitude = lat
         self.longitude = lon
         self.name = name
+        self.contact_phone = contact_phone
+        self.contact_email = contact_email
         self.space_type_id = space_type.id
         self.rate_type_id = rate_type.id
         self.price = price
+        self.ada_accessible = ada_accessible
         self.description = description
         self.created = datetime.datetime.today()
         self.expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_in_days)

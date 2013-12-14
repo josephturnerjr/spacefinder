@@ -57,6 +57,14 @@
           <span class="help-inline"></span>
         </div>
       </div>
+      <div class="control-group">
+        <label class="control-label" for="inputADA">This space is...</label>
+        <div class="controls">
+          <label class='radio'><input type='radio' name='ada_accessible' value='yes' checked> ADA accessible</label>
+          <label class='radio'><input type='radio' name='ada_accessible' value='no'> not ADA accessible</label>
+          <span class="help-inline"></span>
+        </div>
+      </div>
       <hr />
       <div class="control-group">
         <label class="control-label" for="inputDescription">How long should your listing stay active?</label>
@@ -67,6 +75,22 @@
             {% endfor %}
           </select>
           <span class="help-inline"></span>
+        </div>
+      </div>
+      <hr />
+      <h4>Contact information</h4>
+      <div class="control-group">
+        <label class="control-label" for="inputPhone">Contact phone number *</label>
+        <div class="controls">
+          <input type='text' name="contact_phone" maxlength="100" id="inputPhone" value="{{phone}}" placeholder="555.555.5555"></textarea>
+          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Contact email address</label>
+        <div class="controls">
+          <input type='text' name="contact_email" maxlength="100" id="inputEmail" value="{{email}}" placeholder="example@example.com"></textarea>
+          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
         </div>
       </div>
       <div class="control-group">
@@ -81,6 +105,4 @@
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
-<script>
-</script>
 {% endblock %}

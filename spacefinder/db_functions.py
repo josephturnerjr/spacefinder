@@ -23,12 +23,12 @@ def init_db():
 
 1800 sq ft., with spacious meeting rooms.
 
-Large windows, free wifi, free parking, quiet neighbors.""", rate_type=rate_type_ids['Month']))
+Large windows, free wifi, free parking, quiet neighbors.""", contact_phone="55555555555", rate_type=rate_type_ids['Month']))
     db.session.add(Listing(address="6695 Dobbin Rd, Columbia, MD",
                            lat="39.186198", lon="-76.824842",
                            name="Frisco Taphouse and Brewery", space_type=type_ids["meeting"], price=1700,
                            description="""Large open space in a quiet subdivision near Columbia.
 
-High ceilings, lots of parking, good beer selection.""", rate_type=rate_type_ids['Day'], expires_in_days=-1))
+High ceilings, lots of parking, good beer selection.""", rate_type=rate_type_ids['Day'], contact_phone="55555555555", expires_in_days=-1))
     db.session.add(Account("admin", "example@example.com", "Pass1234"))
     db.session.commit()
