@@ -19,7 +19,7 @@ Edit listing
 </div>
 <div class='submit'>
   <div class="container">
-    <form class="form-horizontal" method="post" action="/admin/listing/{{listing.id}}/edit">
+    <form data-validate="parsley" class="form-horizontal" method="post" action="/admin/listing/{{listing.id}}/edit">
       {% include "submission-form.html" %}
       <div class="control-group">
         <div class="controls">
@@ -33,6 +33,5 @@ Edit listing
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
-<script>
-</script>
+<script src="{{url_for('static', filename='js/vendor/parsley.js')}}"></script>
 {% endblock %}

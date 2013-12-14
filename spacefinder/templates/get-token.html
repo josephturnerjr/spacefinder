@@ -13,7 +13,7 @@
 </div>
 <div class='submit'>
   <div class="container">
-    <form class='form-horizontal' method='POST' action='/submit'>
+    <form id="token-form" data-validate="parsley" class='form-horizontal' method='POST' action='/submit'>
       <div class="control-group error">
         <span class="help-block">{{errors or ""}}</span>
       </div>
@@ -23,7 +23,7 @@
       <div class="control-group">
         <label class="control-label" for="inputName">Contact Name *</label>
         <div class="controls">
-          <input type="text" id="inputName" name="name">
+          <input data-required='true' data-error-container="input#inputName+span.help-inline" type="text" id="inputName" name="name">
           <span class="help-inline"></span>
         </div>
       </div>
@@ -37,18 +37,18 @@
       <div class="control-group">
         <label class="control-label" for="inputOrgname">Organization Name *</label>
         <div class="controls">
-          <input type="text" id="inputOrgname" name="orgname">
+          <input data-required='true' data-error-container="input#inputOrgname+span.help-inline" type="text" id="inputOrgname" name="orgname">
           <span class="help-inline"></span>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="inputOrgaddress">Organization Address *</label>
         <div class="controls">
-          <input type="text" placeholder='Address line 1' name="orgaddr1"><br /><br/>
+          <input data-required='true' data-error-container="input#inputAddr+span.help-inline" type="text" placeholder='Address line 1' name="orgaddr1"><br /><br/>
           <input type="text" placeholder='Address line 2' name="orgaddr2"><br /><br/>
           <input type="text" placeholder='City' name="orgcity"><br /><br/>
           <input type="text" class='input-small' placeholder='State' name="orgstate">
-          <input type="text" class='input-small' placeholder='Zip code' name="orgzip">
+          <input type="text" class='input-small' placeholder='Zip code' name="orgzip" id='inputAddr'>
           <span class="help-inline"></span>
         </div>
       </div>
@@ -81,14 +81,14 @@
       <div class="control-group">
         <label class="control-label" for="inputEmail">Contact Email *</label>
         <div class="controls">
-          <input type="text" id="inputEmail" placeholder="example@example.com" name="email">
+          <input data-required='true' data-type="email" data-error-container="input#inputEmail+span.help-inline" type="text" id="inputEmail" placeholder="example@example.com" name="email">
           <span class="help-inline"></span>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="inputPhone">Contact Phone</label>
         <div class="controls">
-          <input type="text" id="inputPhone" placeholder="555-555-5555" name="phone">
+          <input data-type="phone" data-error-container="input#inputPhone+span.help-inline" type="text" id="inputPhone" placeholder="555-555-5555" name="phone">
           <span class="help-inline"></span>
         </div>
       </div>
@@ -102,4 +102,5 @@
 </div>
 {% endblock %}
 {% block scripts %}
+<script src="{{url_for('static', filename='js/vendor/parsley.js')}}"></script>
 {% endblock %}
