@@ -233,11 +233,14 @@ def submit_step1(token):
     rate_types = RateType.query.all()
     return render_template('submit2.html',
                            types=listing_types,
-                           address=address,
-                           lat=lat,
-                           lon=lon,
                            rate_types=rate_types,
-                           token=token)
+                           token=token,
+                           listing={
+                               "address": address,
+                               "latitude": lat,
+                               "longitude": lon,
+                               "ada_accessible": True,
+                           })
 
 
 @views.route('/submission/<token>/submit/step2', methods=['POST'])
@@ -245,6 +248,7 @@ def submit_step2(token):
     # Look up token
     token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
     # Check for a real token and that they havent already submitted
+    print request.form
     if not token or token.listing:
         return redirect('/submit')
     address = request.form.get('address')
@@ -265,20 +269,30 @@ def submit_step2(token):
     rate_types = RateType.query.all()
     expires_in_days = request.form.get('expires_in_days')
     ada_accessible = request.form.get('ada_accessible')
+    if ada_accessible == "no":
+        ada_accessible = False
+    else:
+        ada_accessible = True
     contact_phone = request.form.get('contact_phone')
     contact_email = request.form.get('contact_email')
+    listing={
+        "address": address,
+        "latitude": lat,
+        "longitude": lon,
+        "name": name,
+        "price": price,
+        "space_type": space_type,
+        "description": description,
+        "contact_email": contact_email,
+        "contact_phone": contact_phone,
+        "ada_accessible": ada_accessible
+    }
     if not all([space_type, price, name, description, contact_phone]):
         return render_template('submit2.html',
                                types=listing_types,
-                               address=address,
-                               lat=lat,
-                               lon=lon,
-                               name=name,
-                               price=price,
-                               space_type=space_type,
-                               description=description,
                                rate_types=rate_types,
                                token=token,
+                               listing=listing,
                                error="All required fields must be filled in")
     try:
         try:
@@ -294,20 +308,10 @@ def submit_step2(token):
     except Exception, e:
         return render_template('submit2.html',
                                types=listing_types,
-                               address=address,
-                               lat=lat,
-                               lon=lon,
-                               name=name,
-                               price=price,
-                               space_type=space_type,
-                               token=token,
                                rate_types=rate_types,
-                               description=description,
+                               token=token,
+                               listing=listing,
                                error=str(e))
-    if ada_accessible == "no":
-        ada_accessible = False
-    else:
-        ada_accessible = True
     listing = Listing(address=address,
                       lat=lat,
                       lon=lon,

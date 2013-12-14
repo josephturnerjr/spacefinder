@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block head %}
-<title>Submit a new listing</title>
-<meta name="description" content="Submit a new listing">
-    <link rel="stylesheet" href="/static/css/submit.css">
+  <title>Submit a new listing</title>
+  <meta name="description" content="Submit a new listing">
+  <link rel="stylesheet" href="/static/css/submit.css">
 {% endblock %}
 {% block body %}
 <div id="header" class='banner'>
@@ -14,57 +14,7 @@
 <div class='submit'>
   <div class="container">
     <form class="form-horizontal" method="post" action="/submission/{{token.key}}/submit/step2">
-      <input type="hidden" name="address" value="{{address}}">
-      <input type="hidden" name="latitude" value="{{lat}}">
-      <input type="hidden" name="longitude" value="{{lon}}">
-      <div class="control-group error">
-        <span class="help-block">{{error}}</span>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">Name *</label>
-        <div class="controls">
-          <input type='text' name="name" maxlength="100" id="inputName" value="{{name}}" placeholder="Quiet space near the water"></textarea>
-          <span class="help-inline">This name will appear in user searches, so make it descriptive. (100 characters max)</span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputType">Space type *</label>
-        <div class="controls">
-          <select name="space_type" id="inputType">
-            {% for type in types %}   
-              <option value='{{type.id}}' {% if type == space_type %}selected='selected'{%endif%}>{{type.name}}</option>
-            {% endfor %}
-          </select>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputPrice">Rate *</label>
-        <div class="controls">
-          <input type="text" value="{{price}}" name="price" id="inputPrice" placeholder="100"> per
-          <select name="rate_type" id="inputRate">
-            {% for type in rate_types %}   
-              <option value='{{type.id}}' {% if type == rate_type %}selected='selected'{%endif%}>{{type.name}}</option>
-            {% endfor %}
-          </select>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputDescription">Description (1500 characters max) *</label>
-        <div class="controls">
-          <textarea name="description" id="inputDescription" class='span5' maxlength='1500' rows="10" cols="40" placeholder="Suggestions: size, amenities, parking, shared/private space, wifi/internet access, availability, etc. Use this description to sell your space!">{{description}}</textarea>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputADA">This space is...</label>
-        <div class="controls">
-          <label class='radio'><input type='radio' name='ada_accessible' value='yes' checked> ADA accessible</label>
-          <label class='radio'><input type='radio' name='ada_accessible' value='no'> not ADA accessible</label>
-          <span class="help-inline"></span>
-        </div>
-      </div>
+      {% include "submission-form.html" %}
       <hr />
       <div class="control-group">
         <label class="control-label" for="inputDescription">How long should your listing stay active?</label>
@@ -75,22 +25,6 @@
             {% endfor %}
           </select>
           <span class="help-inline"></span>
-        </div>
-      </div>
-      <hr />
-      <h4>Contact information</h4>
-      <div class="control-group">
-        <label class="control-label" for="inputPhone">Contact phone number *</label>
-        <div class="controls">
-          <input type='text' name="contact_phone" maxlength="100" id="inputPhone" value="{{phone}}" placeholder="555.555.5555"></textarea>
-          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputEmail">Contact email address</label>
-        <div class="controls">
-          <input type='text' name="contact_email" maxlength="100" id="inputEmail" value="{{email}}" placeholder="example@example.com"></textarea>
-          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
         </div>
       </div>
       <div class="control-group">

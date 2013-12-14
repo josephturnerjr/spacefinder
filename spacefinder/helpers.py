@@ -33,11 +33,19 @@ def edit_listing(listing, request):
         price = float(price)
     except ValueError:
         raise FieldError("Price must be a number")
+    ada_accessible = request.form.get('ada_accessible')
+    if ada_accessible == "no":
+        ada_accessible = False
+    else:
+        ada_accessible = True
+    listing.contact_phone = request.form.get('contact_phone')
+    listing.contact_email = request.form.get('contact_email')
     listing.name = name
     listing.space_type = space_type
     listing.rate_type = rate_type
     listing.price = price
     listing.description = description
+    listing.ada_accessible = ada_accessible
     db.session.add(listing)
     db.session.commit()
 
