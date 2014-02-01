@@ -17,6 +17,19 @@ def format_currency(value):
     return "${:,.0f}".format(value)
 
 
+@app.template_filter('safe_email')
+def format_safe_email(email):
+    return email.replace("@", " (at) ").replace(".", " (dot) ")
+
+
+@app.template_filter('phone')
+def format_phone_number(phone):
+    if len(phone) == 7:
+        return "%s - %s" % (phone[:3], phone[3:])
+    elif len(phone) == 10:
+        return "(%s) %s - %s" % (phone[:3], phone[3:6], phone[6:])
+
+
 # Browsing (public) functions
 @views.route('/')
 def index():
@@ -220,11 +233,14 @@ def submit_step1(token):
     rate_types = RateType.query.all()
     return render_template('submit2.html',
                            types=listing_types,
-                           address=address,
-                           lat=lat,
-                           lon=lon,
                            rate_types=rate_types,
-                           token=token)
+                           token=token,
+                           listing={
+                               "address": address,
+                               "latitude": lat,
+                               "longitude": lon,
+                               "ada_accessible": True,
+                           })
 
 
 @views.route('/submission/<token>/submit/step2', methods=['POST'])
@@ -232,6 +248,7 @@ def submit_step2(token):
     # Look up token
     token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
     # Check for a real token and that they havent already submitted
+    print request.form
     if not token or token.listing:
         return redirect('/submit')
     address = request.form.get('address')
@@ -250,53 +267,69 @@ def submit_step2(token):
     name = request.form.get('name')
     listing_types = ListingType.query.all()
     rate_types = RateType.query.all()
-    if not all([space_type, price, name, description]):
+    expires_in_days = request.form.get('expires_in_days')
+    ada_accessible = request.form.get('ada_accessible')
+    if ada_accessible == "no":
+        ada_accessible = False
+    else:
+        ada_accessible = True
+    contact_phone = request.form.get('contact_phone')
+    contact_email = request.form.get('contact_email')
+    listing={
+        "address": address,
+        "latitude": lat,
+        "longitude": lon,
+        "name": name,
+        "price": price,
+        "space_type": space_type,
+        "description": description,
+        "contact_email": contact_email,
+        "contact_phone": contact_phone,
+        "ada_accessible": ada_accessible
+    }
+    if not all([space_type, price, name, description, contact_phone]):
         return render_template('submit2.html',
                                types=listing_types,
-                               address=address,
-                               lat=lat,
-                               lon=lon,
-                               name=name,
-                               price=price,
-                               space_type=space_type,
-                               description=description,
                                rate_types=rate_types,
                                token=token,
+                               listing=listing,
                                error="All required fields must be filled in")
     try:
-        if price.startswith('$'):
-            price = price[1:]
-        price = float(price)
-    except ValueError:
+        try:
+            if price.startswith('$'):
+                price = price[1:]
+            price = float(price)
+        except:
+            raise Exception("Price must be a number")
+        try:
+            expires_in_days = int(expires_in_days)
+        except:
+            raise Exception("Expiration must be a number of days")
+    except Exception, e:
         return render_template('submit2.html',
                                types=listing_types,
-                               address=address,
-                               lat=lat,
-                               lon=lon,
-                               name=name,
-                               price=price,
-                               space_type=space_type,
-                               token=token,
                                rate_types=rate_types,
-                               description=description,
-                               error="Price must be a number")
-    listing = create_listing(address,
-                             lat,
-                             lon,
-                             name,
-                             space_type,
-                             rate_type,
-                             price,
-                             description)
+                               token=token,
+                               listing=listing,
+                               error=str(e))
+    listing = Listing(address=address,
+                      lat=lat,
+                      lon=lon,
+                      name=name,
+                      space_type=space_type,
+                      rate_type=rate_type,
+                      price=price,
+                      description=description,
+                      ada_accessible=ada_accessible,
+                      contact_email=contact_email,
+                      contact_phone=contact_phone,
+                      expires_in_days=expires_in_days)
+    db.session.add(listing)
+    db.session.commit()
     token.listing = listing
     db.session.add(token)
     db.session.commit()
     return redirect("/submission/%s" % token.key)
 
 
-#Helpers
-def create_listing(address, lat, lon, name, space_type, rate_type, price, description):
-    listing = Listing(address, lat, lon, name, space_type, rate_type, price, description)
-    db.session.add(listing)
-    db.session.commit()
     return listing

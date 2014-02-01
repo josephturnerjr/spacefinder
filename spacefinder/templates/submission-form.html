@@ -1,0 +1,67 @@
+      <input type="hidden" name="address" value="{{listing.address}}">
+      <input type="hidden" name="latitude" value="{{listing.latitude}}">
+      <input type="hidden" name="longitude" value="{{listing.longitude}}">
+      <div class="control-group error">
+        <span class="help-block">{{error}}</span>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">Name *</label>
+        <div class="controls">
+          <input data-required='true' data-error-container="input#inputName+span.help-inline" type='text' name="name" maxlength="100" id="inputName" value="{{listing.name}}" placeholder="Quiet space near the water">
+          <span class="help-inline">This name will appear in user searches, so make it descriptive. (100 characters max)</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputType">Space type *</label>
+        <div class="controls">
+          <select name="space_type" id="inputType">
+            {% for type in types %}   
+              <option value='{{type.id}}' {% if type == listing.space_type %}selected='selected'{%endif%}>{{type.name}}</option>
+            {% endfor %}
+          </select>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPrice">Rate *</label>
+        <div class="controls">
+          <input data-required='true' data-type="number" data-error-container="select#inputRate+span.help-inline" type="text" value="{{listing.price}}" name="price" id="inputPrice" placeholder="100"> per
+          <select name="rate_type" id="inputRate">
+            {% for type in rate_types %}   
+              <option value='{{type.id}}' {% if type == listing.rate_type %}selected='selected'{%endif%}>{{type.name}}</option>
+            {% endfor %}
+          </select>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputDescription">Description (1500 characters max) *</label>
+        <div class="controls">
+          <textarea data-required='true' data-error-container="textarea#inputDescription+span.help-inline" name="description" id="inputDescription" class='span5' maxlength='1500' rows="10" cols="40" placeholder="Suggestions: size, amenities, parking, shared/private space, wifi/internet access, availability, etc. Use this description to sell your space!">{{listing.description}}</textarea>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputADA">This space is...</label>
+        <div class="controls">
+          <label class='radio'><input type='radio' name='ada_accessible' value='yes' {% if listing.ada_accessible %}checked{% endif %}> ADA accessible</label>
+          <label class='radio'><input type='radio' name='ada_accessible' value='no' {% if not listing.ada_accessible %}checked{% endif %}> not ADA accessible</label>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <hr />
+      <h4>Contact information</h4>
+      <div class="control-group">
+        <label class="control-label" for="inputPhone">Contact phone number *</label>
+        <div class="controls">
+          <input data-required='true' data-type="phone" data-error-container="input#inputPhone+span.help-inline" type='text' name="contact_phone" maxlength="100" id="inputPhone" value="{{listing.contact_phone or ""}}" placeholder="555.555.5555">
+          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Contact email address</label>
+        <div class="controls">
+          <input type='text' name="contact_email" maxlength="100" id="inputEmail" value="{{listing.contact_email or ""}}" placeholder="example@example.com">
+          <span class="help-inline"><em>This will appear on the listing itself.</em></span>
+        </div>
+      </div>

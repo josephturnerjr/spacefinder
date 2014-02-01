@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block head %}
-<title>Submit a new listing</title>
-<meta name="description" content="Submit a new listing">
-    <link rel="stylesheet" href="/static/css/submit.css">
+  <title>Submit a new listing</title>
+  <meta name="description" content="Submit a new listing">
+  <link rel="stylesheet" href="/static/css/submit.css">
 {% endblock %}
 {% block body %}
 <div id="header" class='banner'>
@@ -13,47 +13,17 @@
 </div>
 <div class='submit'>
   <div class="container">
-    <form class="form-horizontal" method="post" action="/submission/{{token.key}}/submit/step2">
-      <input type="hidden" name="address" value="{{address}}">
-      <input type="hidden" name="latitude" value="{{lat}}">
-      <input type="hidden" name="longitude" value="{{lon}}">
-      <div class="control-group error">
-        <span class="help-block">{{error}}</span>
-      </div>
+    <form data-validate="parsley" class="form-horizontal" method="post" action="/submission/{{token.key}}/submit/step2">
+      {% include "submission-form.html" %}
+      <hr />
       <div class="control-group">
-        <label class="control-label" for="inputName">Name *</label>
+        <label class="control-label" for="inputDescription">How long should your listing stay active?</label>
         <div class="controls">
-          <input type='text' name="name" maxlength="100" id="inputName" value="{{name}}" placeholder="Quiet space near the water"></textarea>
-          <span class="help-inline">This name will appear in user searches, so make it descriptive. (max 100 characters)</span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputType">Space type *</label>
-        <div class="controls">
-          <select name="space_type" id="inputType">
-            {% for type in types %}   
-              <option value='{{type.id}}' {% if type == space_type %}selected='selected'{%endif%}>{{type.name}}</option>
+          <select name="expires_in_days" id="expiration">
+            {% for days in [15, 30, 90, 180, 365] %}   
+              <option value='{{days}}' {% if days == 90 %}selected='selected'{%endif%}>{{days}} days</option>
             {% endfor %}
           </select>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputPrice">Rate *</label>
-        <div class="controls">
-          <input type="text" value="{{price}}" name="price" id="inputPrice" placeholder="100"> per
-          <select name="rate_type" id="inputRate">
-            {% for type in rate_types %}   
-              <option value='{{type.id}}' {% if type == rate_type %}selected='selected'{%endif%}>{{type.name}}</option>
-            {% endfor %}
-          </select>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputDescription">Description (1500 characters max) *</label>
-        <div class="controls">
-          <textarea name="description" id="inputDescription" class='span5' maxlength='1500' rows="10" cols="40" placeholder="Suggestions: size, amenities, parking, shared/private space, wifi/internet access, availability, etc. Use this description to sell your space!">{{description}}</textarea>
           <span class="help-inline"></span>
         </div>
       </div>
@@ -69,6 +39,5 @@
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
-<script>
-</script>
+<script src="{{url_for('static', filename='js/vendor/parsley.js')}}"></script>
 {% endblock %}

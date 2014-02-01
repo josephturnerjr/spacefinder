@@ -17,6 +17,14 @@
       <p>
         <strong>Type of space: </strong> {{listing.space_type.name}}
       </p>
+      <p>
+        <strong>Contact phone: </strong> {{listing.contact_phone|phone}}
+      </p>
+      {% if listing.contact_email %}
+      <p>
+        <strong>Contact phone: </strong> {{listing.contact_email|safe_email}}
+      </p>
+      {% endif %}
       <hr />
       <p>
         <span class='description'>{{listing.description}}</span>

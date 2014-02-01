@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block head %}
-<title>Submit a new listing</title>
-<meta name="description" content="Submit a new listing">
+<title>Edit your submission</title>
+<meta name="description" content="Edit your submission">
     <link rel="stylesheet" href="/static/css/submit.css">
 {% endblock %}
 {% block body %}
@@ -12,51 +12,8 @@
 </div>
 <div class='submit'>
   <div class="container">
-    <form class="form-horizontal" method="post" action="/submission/{{token.key}}/edit">
-      <input type="hidden" name="address" value="{{listing.address}}">
-      <input type="hidden" name="latitude" value="{{listing.latitude}}">
-      <input type="hidden" name="longitude" value="{{listing.longitude}}">
-      <div class="control-group error">
-        <span class="help-block">{{error}}</span>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">Name *</label>
-        <div class="controls">
-          <input type='text' name="name" maxlength="100" id="inputName" value="{{listing.name}}" placeholder="Quiet space near the water"></textarea>
-          <span class="help-inline">This name will appear in user searches, so make it descriptive. (max 100 characters)</span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputType">Space type *</label>
-        <div class="controls">
-          <select name="space_type" id="inputType">
-            {% for type in types %}   
-              <option value='{{type.id}}' {% if type == listing.space_type %}selected='selected'{%endif%}>{{type.name}}</option>
-            {% endfor %}
-          </select>
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputPrice">Rate *</label>
-        <div class="controls">
-          <input type="text" value="{{listing.price}}" name="price" id="inputPrice" placeholder="100"> per
-          <select name="rate_type" id="inputRate">
-            {% for type in rate_types %}   
-              <option value='{{type.id}}' {% if type == listing.rate_type %}selected='selected'{%endif%}>{{type.name}}</option>
-            {% endfor %}
-          </select>
-
-          <span class="help-inline"></span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputDescription">Description</label>
-        <div class="controls">
-          <textarea name="description" id="inputDescription" class='span5' rows="10" cols="40" placeholder="Suggestions: size, amenities, parking, shared/private space, wifi/internet access, availability, etc. Use this description to sell your space!">{{listing.description}}</textarea>
-          <span class="help-inline"></span>
-        </div>
-      </div>
+    <form data-validate="parsley" class="form-horizontal" method="post" action="/submission/{{token.key}}/edit">
+      {% include "submission-form.html" %}
       <div class="control-group">
         <div class="controls">
           <button id="create-account" type="submit" class="btn btn-primary">Update listing</button>
@@ -69,6 +26,5 @@
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
-<script>
-</script>
+<script src="{{url_for('static', filename='js/vendor/parsley.js')}}"></script>
 {% endblock %}
