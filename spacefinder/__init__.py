@@ -3,7 +3,12 @@ import os
 
 env = os.environ.get('ENVIRONMENT_TYPE', 'dev')
 app = Flask(__name__)
-app.config.from_object('spacefinder.config.%sConfig' % env.capitalize())
+try:
+    app.config.from_object('spacefinder.config.%sConfig' % env.capitalize())
+except:
+    print "Unable to import the configuration file. This is most likely because you have yet to create a config.py file."
+    print "See example.config.py for more instructions."
+    sys.exit(0)
 
 
 @app.errorhandler(404)

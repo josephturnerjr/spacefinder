@@ -1,3 +1,4 @@
 env/
 *.pyc
 .vagrant
+spacefinder/config.py
