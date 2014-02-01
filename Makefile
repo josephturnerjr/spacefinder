@@ -16,8 +16,8 @@ css:
 	
 run: 
 	tmux new-session -d -s olgn '$(PYTHON) runserver.py'
-	tmux splitw -h -t olgn 'cd spacefinder/static/css; ~/bin/lesswatch'
-	tmux splitw -h -t olgn 'cd spacefinder/static/js; watch coffee -c .'
+	tmux splitw -h -t olgn 'cd $(APP_DIR)/static/css; ~/bin/lesswatch'
+	tmux splitw -h -t olgn 'cd $(APP_DIR)/static/js; make watch'
 	tmux attach
 
 debug:
