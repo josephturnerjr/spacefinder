@@ -1,6 +1,6 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
-                   render_template, session, abort, send_from_directory)
+                   render_template, session, abort, send_from_directory, url_for)
 from models import (Listing, Account, ListingType, Submitter, RateType,
                     SubmissionToken, SubmissionPhoto, db, get_space_type, get_rate_type)
 from password import check_pw
@@ -194,27 +194,26 @@ def submission_photos(token):
     # See if token has submitted
     if not token.listing:
         return redirect('/submission/%s' % token.key)
-    # TODO
     return render_template('photos-submission.html',
                            token=token,
                            listing=token.listing)
 
 
-@views.route('/submission/<token>/photos', methods=['POST'])
-def submit_photo(token):
+@views.route('/submission/<token_>/photos', methods=['POST'])
+def submit_photo(token_):
     # Look up token
-    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    token = SubmissionToken.query.filter(SubmissionToken.key == token_).first()
     if not token:
         return redirect('/submit')
     # See if token has submitted
     if not token.listing:
         return redirect('/submission/%s' % token.key)
     if not request.files.get('photo'):
-        abort(500)
+        return redirect(url_for('.submission_photos', token=token_))
     token.listing.photos.append(SubmissionPhoto(request.files['photo']))
     db.session.add(token)
     db.session.commit()
-    return ""
+    return redirect(url_for('.submission_photos', token=token_))
 
 
 @views.route("/submission/<token>/photos/<int:photo_id>", methods=["DELETE"])

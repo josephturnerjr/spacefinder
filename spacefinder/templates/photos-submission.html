@@ -12,24 +12,35 @@
 </div>
 <div class='submit'>
   <div class="container">
-    {%for row in listing.photos|batch(3) %}
-      <div class='row-fluid photo-row'>
-        {% for photo in row %}
-        <div class='span4 photo-holder'>
-          <div class='the-photo'>
-            <a href="/images/{{photo.filename}}">
-              <img src='/images/{{photo.thumbnail}}' />
-            </a>
+    {% if listing.photos %}
+      {%for row in listing.photos|batch(3) %}
+        <div class='row-fluid photo-row'>
+          {% for photo in row %}
+          <div class='span4 photo-holder'>
+            <div class='the-photo'>
+              <a href="/images/{{photo.filename}}">
+                <img src='/images/{{photo.thumbnail}}' />
+              </a>
+            </div>
+            <p class='muted sharing-buttons'>
+              <a href='photos/{{photo.id}}' data-action='delete' title='Delete this photo'>
+                Delete
+              </a>
+            </p>
           </div>
-          <p class='muted sharing-buttons'>
-            <a href='photos/{{photo.id}}' data-action='delete' title='Delete this photo'>
-              Delete
-            </a>
-          </p>
+          {%endfor%}
         </div>
-        {%endfor%}
-      </div>
-    {%endfor%}
+      {%endfor%}
+    {% else %}
+      <p>You don't have any photos yet. Add photos using the form below.</p>
+    {% endif %}
+    <hr />
+    <h2>Add a new photo</h2>
+
+    <form action="photos" method=post enctype=multipart/form-data>
+      <input type=file name=photo>
+      <input type=submit>
+    </form>
   </div>
 </div>
 {% endblock %}
