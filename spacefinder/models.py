@@ -179,7 +179,7 @@ class SubmissionPhoto(db.Model):
     filename = db.Column(db.String(256))
     thumbnail = db.Column(db.String(256))
     listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'))
-    listing = db.relationship('Listing')
+    listing = db.relationship('Listing', backref=db.backref('photos'))
 
     def __init__(self, f):
         self.created_on = datetime.datetime.now()

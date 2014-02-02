@@ -1,8 +1,8 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
-                   render_template, session, abort)
+                   render_template, session, abort, send_from_directory)
 from models import (Listing, Account, ListingType, Submitter, RateType,
-                    SubmissionToken, db, get_space_type, get_rate_type)
+                    SubmissionToken, SubmissionPhoto, db, get_space_type, get_rate_type)
 from password import check_pw
 import sf_email
 import helpers
@@ -35,7 +35,19 @@ def format_phone_number(phone):
 def index():
     listings = Listing.query.filter_by(expired=False).filter_by(published=True).all()
     locations = [[float(l.latitude), float(l.longitude), l.name] for l in listings]
-    return render_template('index.html', listings=listings, locations = locations)
+    return render_template('index.html',
+                           listings=listings,
+                           locations=locations)
+
+
+@app.route('/images/<filename>')
+def submission_image(filename):
+    attach = False
+    if request.args.get('dl'):
+        attach = True
+    return send_from_directory(app.config['IMG_STORAGE'],
+                               filename,
+                               as_attachment=attach)
 
 
 @views.route('/listing/<int:listing_id>')
@@ -94,7 +106,8 @@ def create_token():
     orgname = request.form.get('orgname')
     orgtype = request.form.get('orgtype')
     member = request.form.get('member')
-    addr_parts = [request.form.get(x, '') for x in ['orgaddr1', 'orgaddr2', 'orgcity', 'orgstate', 'orgzip']]
+    fields = ['orgaddr1', 'orgaddr2', 'orgcity', 'orgstate', 'orgzip']
+    addr_parts = [request.form.get(x, '') for x in fields]
     if not all([email, name, orgname, orgtype]) or not any(addr_parts):
         return render_template('get-token.html', errors='All required fields must be filled in.')
     member = member == "yes"
@@ -170,6 +183,38 @@ def delete_submission(token):
     db.session.delete(token)
     db.session.commit()
     return redirect('/')
+
+
+@views.route('/submission/<token>/photos')
+def submission_photos(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token.key)
+    # TODO
+    return render_template('photos-submission.html',
+                           token=token,
+                           listing=token.listing)
+
+
+@views.route('/submission/<token>/photos', methods=['POST'])
+def submit_photo(token):
+    # Look up token
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token.key)
+    if not request.files.get('photo'):
+        abort(500)
+    token.listing.photos.append(SubmissionPhoto(request.files['photo']))
+    db.session.add(token)
+    db.session.commit()
+    return ""
 
 
 @views.route('/submission/<token>/edit')

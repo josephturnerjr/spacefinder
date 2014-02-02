@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import os
+import sys
 
 env = os.environ.get('ENVIRONMENT_TYPE', 'dev')
 app = Flask(__name__)
