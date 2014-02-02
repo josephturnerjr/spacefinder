@@ -50,6 +50,30 @@
     </tr>  
   {% endfor %}
   </table>
+  <div class='row-fluid benefactors'>
+  {% if benefactors %}
+  <div class='benefactors well'>
+    <h3>Benefactors</h3>
+    <p class='muted'><em>Maryland Nonprofits would like to thank the following donors for their support in the creation of this site.</em></p>
+    {%for row in benefactors|batch(3) %}
+      <div class='row-fluid benefactor-row'>
+        {% for benefactor in row %}
+        <div class='span4 benefactor-holder'>
+          <div class='benefactor'>
+            <a href="{{benefactor.website}}">
+              <img src='/images/{{benefactor.thumbnail}}' />
+            </a>
+            <a href="{{benefactor.website}}">
+             {{benefactor.name}} 
+            </a>
+          </div>
+        </div>
+        {%endfor%}
+      </div>
+    {%endfor%}
+  </div>
+  {% endif %}
+  </div>
 </div>
 {% endblock %}
 {% block scripts %}

@@ -1,7 +1,7 @@
 from spacefinder import app
 from flask import (Blueprint, request, redirect,
                    render_template, session, abort, send_from_directory, url_for)
-from models import (Listing, Account, ListingType, Submitter, RateType,
+from models import (Listing, Account, ListingType, Submitter, RateType, Benefactor,
                     SubmissionToken, SubmissionPhoto, db, get_space_type, get_rate_type)
 from password import check_pw
 import sf_email
@@ -35,8 +35,10 @@ def format_phone_number(phone):
 def index():
     listings = Listing.query.filter_by(expired=False).filter_by(published=True).all()
     locations = [[float(l.latitude), float(l.longitude), l.name] for l in listings]
+    benefactors = Benefactor.query.all()
     return render_template('index.html',
                            listings=listings,
+                           benefactors=benefactors,
                            locations=locations)
 
 

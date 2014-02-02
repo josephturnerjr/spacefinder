@@ -198,6 +198,35 @@ class SubmissionPhoto(db.Model):
         self.thumbnail = thumb_name
 
 
+class Benefactor(db.Model):
+    __tablename__ = "benefactors"
+    THUMB_SIZE = (256, 256)
+    id = db.Column(db.Integer, primary_key=True)
+    created_on = db.Column(db.DateTime())
+    logo_filename = db.Column(db.String(256))
+    thumbnail = db.Column(db.String(256))
+    name = db.Column(db.String(256))
+    website = db.Column(db.String(1024))
+
+    def __init__(self, name, img_f, website=None):
+        self.name = name
+        self.website = website
+        self.created_on = datetime.datetime.now()
+        img = Image.open(img_f)
+        # Convert image to jpg for space
+        filename = "%s.jpg" % uuid4()
+        filepath = os.path.join(app.config["IMG_STORAGE"], filename)
+        img.save(filepath)
+        # Save a thumbnail for intermediary display
+        img.thumbnail(self.THUMB_SIZE, Image.ANTIALIAS)
+        thumb_name = "%s.jpg" % uuid4()
+        thumb_path = os.path.join(app.config["IMG_STORAGE"], thumb_name)
+        img.save(thumb_path)
+        # Record the file paths
+        self.logo_filename = filename
+        self.thumbnail = thumb_name
+
+
 def get_space_type(type_id):
     try:
         # Check that we've received a valid type id

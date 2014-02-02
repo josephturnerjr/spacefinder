@@ -378,6 +378,63 @@
       </div>
     </div>
   </form>
+  <hr />
+  <h2>Manage benefactors</h2>
+  <h3 class='muted'>Existing benefactors</h3>
+  <table class='table table-bordered'>
+  <thead>
+    <tr>  
+      <th>
+        Benefactor
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>  
+  </thead>
+  {% for benefactor in benefactors %}
+    <tr>  
+      <td>
+        {{benefactor.name}}
+      </td>
+      <td>
+        <a href='/admin/benefactors/{{benefactor.id}}/delete' data-toggle='tooltip' data-placement='bottom' title='Delete benefactor'><i class='icon-trash'></i></a>
+      </td>
+    </tr>  
+  {% endfor %}
+  </table>
+  <h3 class='muted'>Create new benefactor</h3>
+  <form method='post' action='/admin/benefactors' enctype=multipart/form-data>
+    <div class="control-group">
+      <span class="help-block"></span>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputName">Name *</label>
+      <div class="controls">
+        <input type="text" id="inputName" placeholder="Name" name="name">
+        <span class="help-inline"></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputWebsite">Website URL (will link from their logo)</label>
+      <div class="controls">
+        <input type="text" id="inputWebsite" placeholder="http://example.com" name="website">
+        <span class="help-inline"></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputLogo">Logo *</label>
+      <div class="controls">
+        <input type="file" id="inputLogo" name="logo">
+        <span class="help-inline"></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Create benefactor</button>
+      </div>
+    </div>
+  </form>
 </div>
 {% endblock %}
 {% block scripts %}

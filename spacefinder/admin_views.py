@@ -7,6 +7,7 @@ from flask import (Blueprint,
                    session,
                    abort)
 from models import (Listing,
+                    Benefactor,
                     Account,
                     RateType,
                     Submitter,
@@ -41,6 +42,7 @@ def admin():
     unpublished = filter(lambda x: not x.published and not x.expired, listings)
     published = filter(lambda x: x.published and not x.expired, listings)
     expired = filter(lambda x: x.expired, listings)
+    benefactors = Benefactor.query.all()
     return render_template('admin.html',
                            published=published,
                            unpublished=unpublished,
@@ -48,6 +50,7 @@ def admin():
                            accounts=accounts,
                            rate_types=rate_types,
                            submitters=submitters,
+                           benefactors=benefactors,
                            types=listing_types)
 
 
@@ -195,3 +198,24 @@ def create_named_item(item_class, redirect_url=None):
     db.session.add(item)
     db.session.commit()
     return redirect(redirect_url)
+
+
+@views.route('/benefactors', methods=['POST'])
+@requires_login
+def create_benefactor():
+    redirect_url = url_for('.admin')
+    name = request.form.get('name')
+    website = request.form.get('website')
+    logo = request.files.get('logo')
+    if not name or not logo:
+        abort(500)
+    benefactor = Benefactor(name=name, website=website, img_f=logo)
+    db.session.add(benefactor)
+    db.session.commit()
+    return redirect(redirect_url)
+
+
+@views.route('/benefactors/<int:id_>/delete')
+@requires_login
+def delete_benefactor(id_):
+    return delete_named_item(Benefactor, id_)
