@@ -217,6 +217,23 @@ def submit_photo(token):
     return ""
 
 
+@views.route("/submission/<token>/photos/<int:photo_id>", methods=["DELETE"])
+def delete_image(token, photo_id):
+    token = SubmissionToken.query.filter(SubmissionToken.key == token).first()
+    if not token:
+        return redirect('/submit')
+    # See if token has submitted
+    if not token.listing:
+        return redirect('/submission/%s' % token.key)
+    photo = SubmissionPhoto.query.get_or_404(photo_id)
+    if not photo.listing == token.listing:
+        return redirect('/submit')
+    db.session.delete(photo)
+    db.session.commit()
+    return ""
+
+
+
 @views.route('/submission/<token>/edit')
 def edit_submission(token):
     # Look up token

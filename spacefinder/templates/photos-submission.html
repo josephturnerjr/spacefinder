@@ -34,4 +34,23 @@
 </div>
 {% endblock %}
 {% block scripts %}
+<script>
+$(document).ready(function(){
+    $('a[data-action="delete"]').click(function(){
+      $.ajax({
+        type: 'DELETE',
+        url: $(this).attr('href'),
+        success: function(){
+          window.location.reload();
+        },
+        error: function(){
+          var answer = confirm("Uh oh, something's gone wrong. Reload the page?")
+          if(answer)
+            window.location.reload();
+        }
+      }); 
+      return false;
+    });
+});
+</script>
 {% endblock %}
