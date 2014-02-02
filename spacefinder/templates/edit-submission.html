@@ -7,6 +7,10 @@
 {% block body %}
 <div id="header" class='banner'>
   <div class="container">
+    <ul class="breadcrumb">
+      <li><a href="/submission/{{token.key}}">Your submission</a> <span class="divider">/</span></li>
+      <li class='active'>Edit</li>
+    </ul>
     <h1>Edit listing for {{listing.address}}</h1>
   </div>
 </div>
