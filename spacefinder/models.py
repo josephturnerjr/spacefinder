@@ -5,6 +5,8 @@ import md5
 from password import hash_pw
 from uuid import uuid4
 from sqlalchemy.ext.hybrid import hybrid_property
+from PIL import Image
+import os
 
 db = SQLAlchemy(app)
 
@@ -166,6 +168,34 @@ class SubmissionToken(db.Model):
     def __init__(self, email):
         self.email = email
         self.key = str(uuid4())
+
+
+class SubmissionPhoto(db.Model):
+    __tablename__ = "submission_photos"
+    ALLOWED_EXTENSIONS = ('jpg', 'gif', 'png', 'jpeg')
+    THUMB_SIZE = (256, 256)
+    id = db.Column(db.Integer, primary_key=True)
+    created_on = db.Column(db.DateTime())
+    filename = db.Column(db.String(256))
+    thumbnail = db.Column(db.String(256))
+    listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'))
+    listing = db.relationship('Listing')
+
+    def __init__(self, f):
+        self.created_on = datetime.datetime.now()
+        img = Image.open(f)
+        # Convert image to jpg for space
+        filename = "%s.jpg" % uuid4()
+        filepath = os.path.join(app.config["IMG_STORAGE"], filename)
+        img.save(filepath)
+        # Save a thumbnail for intermediary display
+        img.thumbnail(self.THUMB_SIZE, Image.ANTIALIAS)
+        thumb_name = "%s.jpg" % uuid4()
+        thumb_path = os.path.join(app.config["IMG_STORAGE"], thumb_name)
+        img.save(thumb_path)
+        # Record the file paths
+        self.filename = filename
+        self.thumbnail = thumb_name
 
 
 def get_space_type(type_id):

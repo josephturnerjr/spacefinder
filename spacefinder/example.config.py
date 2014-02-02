@@ -18,6 +18,7 @@ class Config(object):
 
     ## Where do you want the images stored? ##
     IMG_STORAGE = '/tmp/shots'
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024
 
     ## Where to database ##
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
