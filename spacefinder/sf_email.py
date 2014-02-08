@@ -13,7 +13,7 @@ http://%(domain)s/submission/%(token)s
 
 If the link doesn't work, please copy and paste it into your browser window.
 
-Maryland Nonprofits derives no fee or benefit by facilitating this transaction. We provide this service as a courtesy to our members and sector friends in furtherance of our mission. For further information or details on the listed property, please contact the landlord.
+Maryland Nonprofits derives no fee or benefit by facilitating this transaction. We provide this service as a courtesy to our members and sector friends in furtherance of our mission.
 
 Thanks again,
 Maryland Nonprofits
