@@ -5,11 +5,15 @@ FROM_EMAIL = "Maryland Nonprofits <support@%s>" % app.config['DOMAIN']
 
 TOKEN = {
     "subject": "Submit your nonprofit space",
-    "content": """Thanks for signing up to post your space on Maryland Nonprofits' Space Finder. To complete your submission, click on the link below.
+    "content": """Thanks for signing up to post your space on Maryland Nonprofits' Space Finder. This is Step 2 of a 4-step process. The link provided in this email is the only way to edit your listing in the future - be sure to save it.
+
+Please submit listings for space only if the space is located within the state of Maryland and appropriate for use by a nonprofit organization. Please do not list residential spaces unless appropriately zoned for commercial use. To complete your submission, click on the link below.
 
 http://%(domain)s/submission/%(token)s
 
-If the link doesn't work, please copy and paste it into your browser window. Please submit listings for space only if the space is appropriate for use by a nonprofit organization. Please do not list residential spaces unless appropriately zoned for commercial use.
+If the link doesn't work, please copy and paste it into your browser window.
+
+Maryland Nonprofits derives no fee or benefit by facilitating this transaction. We provide this service as a courtesy to our members and sector friends in furtherance of our mission. For further information or details on the listed property, please contact the landlord.
 
 Thanks again,
 Maryland Nonprofits
