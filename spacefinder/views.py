@@ -392,7 +392,4 @@ def submit_step2(token):
     token.listing = listing
     db.session.add(token)
     db.session.commit()
-    return redirect("/submission/%s" % token.key)
-
-
-    return listing
+    return redirect("/submission/%s/photos" % token.key)

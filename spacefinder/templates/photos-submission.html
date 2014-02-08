@@ -40,10 +40,13 @@
     {% endif %}
     <hr />
     <h2>Add a new photo</h2>
-    <form action="photos" method=post enctype=multipart/form-data>
-      <input type=file name=photo>
-      <input type=submit>
+    <div class='well'>
+    <form action="photos" method='post' enctype='multipart/form-data'>
+      <input type='file' name='photo'>
+      <input class='btn' type='submit' value='Upload this image'>
     </form>
+    </div>
+    <a href="/submission/{{token.key}}" class='btn btn-primary'>Done uploading images</a>
   </div>
 </div>
 {% endblock %}
