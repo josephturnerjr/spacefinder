@@ -138,22 +138,6 @@ class RateType(db.Model):
     def __repr__(self):
         return "<RateType: %s>" % self.name
 
-"""
-It's unclear whether this is necessary or not
-
-class ExpirationTimeframe(db.Model):
-    __tablename__ = "expiration_timeframes"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    days = db.Column(db.Integer, nullable=False)
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return "<ExpirationTimeframe: %s (%s days)>" % (self.name, self.days)
-"""
-
 
 class SubmissionToken(db.Model):
     __tablename__ = "submission_tokens"

@@ -12,10 +12,12 @@
       <li class='active'>Photos</li>
     </ul>
     <h1>Photos for {{listing.address}}</h1>
+    <p class='lead'>Manage the photos for your listing below. You can have up to five photos for your listing, and each photo must be less than 4MB in size.</p>
   </div>
 </div>
 <div class='submit'>
   <div class="container">
+    <h2>Your photos</h2>
     {% if listing.photos %}
       {%for row in listing.photos|batch(3) %}
         <div class='row-fluid photo-row'>
@@ -39,6 +41,7 @@
       <p>You don't have any photos yet. Add photos using the form below.</p>
     {% endif %}
     <hr />
+    {% if listing.photos|count < 5 %}
     <h2>Add a new photo</h2>
     <div class='well'>
     <form action="photos" method='post' enctype='multipart/form-data'>
@@ -46,7 +49,8 @@
       <input class='btn' type='submit' value='Upload this image'>
     </form>
     </div>
-    <a href="/submission/{{token.key}}" class='btn btn-primary'>Done uploading images</a>
+    {% endif %}
+    <a href="/submission/{{token.key}}" class='btn btn-primary'>Done managing images</a>
   </div>
 </div>
 {% endblock %}
