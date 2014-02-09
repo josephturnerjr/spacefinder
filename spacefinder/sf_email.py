@@ -40,7 +40,7 @@ Maryland Nonprofits<br />
 Baltimore, MD 21211<br />
 (410) 727-6367 x2346<br />
 Fax: (410) 235-2190<br />
-<a href='http://www.marylandnonprofits.org'>http://www.marylandnonprofits.org</a></p></html>
+<a href='http://www.marylandnonprofits.org'><img src='cid:inline-logo.jpg' /></a></p></html>
 """}
 
 
@@ -51,8 +51,10 @@ def send_email(to_addr, subject, content, html_content=None, from_addr=FROM_EMAI
             "text": content}
     if html_content:
         data['html'] = html_content
+        
     r = requests.post(
         "https://api.mailgun.net/v2/%s/messages" % app.config.get('MAILGUN_DOMAIN', app.config['DOMAIN']),
+        files=[("inline", open("spacefinder/static/img/inline-logo.jpg"))],
         auth=("api", app.config['MAILGUN_API_KEY']),
         data=data)
     print r.status_code
@@ -64,4 +66,6 @@ def send_token(to_addr, submission_token):
     return send_email(to_addr,
                       TOKEN["subject"],
                       TOKEN["content"] % {"token": submission_token,
+                                          "domain": app.config["DOMAIN"]},
+                      html_content=TOKEN["html_content"] % {"token": submission_token,
                                           "domain": app.config["DOMAIN"]})
