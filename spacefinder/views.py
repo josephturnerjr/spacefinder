@@ -212,9 +212,10 @@ def submit_photo(token_):
         return redirect('/submission/%s' % token.key)
     if not request.files.get('photo'):
         return redirect(url_for('.submission_photos', token=token_))
-    token.listing.photos.append(SubmissionPhoto(request.files['photo']))
-    db.session.add(token)
-    db.session.commit()
+    if len(token.listing.photos) < 5:
+        token.listing.photos.append(SubmissionPhoto(request.files['photo']))
+        db.session.add(token)
+        db.session.commit()
     return redirect(url_for('.submission_photos', token=token_))
 
 
@@ -392,7 +393,4 @@ def submit_step2(token):
     token.listing = listing
     db.session.add(token)
     db.session.commit()
-    return redirect("/submission/%s" % token.key)
-
-
-    return listing
+    return redirect("/submission/%s/photos" % token.key)
