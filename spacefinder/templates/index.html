@@ -6,8 +6,12 @@
 {% endblock %}
 {% block body %}
 <div class='container'>
+<!--
+
+This is commented out temporarily so that this can be inserted as an IFRAME
   <h1>Nonprofit Space Finder</h1>
   <p><em>Maryland Nonprofits has provided this FREE resource to assist nonprofit organizations with finding office, meeting, and other types of space.  To that end, we have tried to make this a user-friendly, self-service tool. Please read and follow all instructions carefully.  We have limited capacity to provide technical support.</em></p>
+-->
   <h3>{{listings|count}} properties currently available</h3>
   <div id='listing-map'></div>
   <table cellpadding="0" cellspacing="0" border="0" id='available' class='table table-bordered table-striped'>
@@ -50,6 +54,10 @@
     </tr>  
   {% endfor %}
   </table>
+<!--
+
+This is commented out temporarily so that this can be inserted as an IFRAME
+
   <div class='row-fluid benefactors'>
   {% if benefactors %}
   <div class='benefactors well'>
@@ -74,6 +82,7 @@
   </div>
   {% endif %}
   </div>
+-->
 </div>
 {% endblock %}
 {% block scripts %}

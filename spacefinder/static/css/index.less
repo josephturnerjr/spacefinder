@@ -44,10 +44,14 @@ h1, h2, h3, h4, h5{
 .navbar{
   color: white;
   .navbar-inner{
-    background: darken(@md-nonprofit-red, 15%);
+    background: white;//darken(@md-nonprofit-red, 15%);
     border: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
   }
   .brand{
+    display: none;
     color: white;
     text-shadow: none;
     padding: 20px;
@@ -66,10 +70,11 @@ h1, h2, h3, h4, h5{
   }
   .btn{
     margin-top: 12px;
+    margin-bottom: 12px;
     background: @md-nonprofit-gold;
     text-shadow: none;
     font-weight: bold;
-    border: 1px solid lighten(@md-nonprofit-gold, 30%);
+    border: 1px solid darken(@md-nonprofit-gold, 30%);
     font-style: italic;
     color: darken(@md-nonprofit-gold, 40%);
     line-height: 30px;

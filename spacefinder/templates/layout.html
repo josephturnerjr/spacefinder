@@ -18,6 +18,10 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
+<!--
+
+This is commented out temporarily so that this can be inserted as an IFRAME
+
     <div class='heading'>
       <div class='container'>
         <a class='brand' target="_blank" href="http://marylandnonprofits.org" title="Go to the Maryland Nonprofits homepage"><img src='/static/img/mdnonprofits-logo.jpg' /></a>
@@ -37,16 +41,17 @@
         </div>
       </div>
     </div>
+-->
     <div id='main-navbar' class="navbar navbar-static-top">
       <div class="navbar-inner">
       <div class='container'>
         <a class="brand" href="/">Nonprofit Space Finder</a>
           {% if not session["session_id"] %}
-            <a class='btn pull-right' href="/submit">Click to submit a listing</a>
+            <a class='btn btn-large pull-right' href="/submit">Click to submit a listing</a>
             <ul class='nav pull-right'>
             </ul>
           {% else %}
-            <a class='btn' href="/submit">Click to submit a listing</a>
+            <a class='btn btn-large' href="/submit">Click to submit a listing</a>
             <ul class='nav pull-right action-nav'>
               <li><a href='/admin' data-toggle='tooltip' data-placement='bottom' title='Go to your dashboard'><i class='icon-dashboard'></i></a></li>
               <li class='divider'></li>
@@ -61,6 +66,10 @@
     {% block body %}{% endblock %}  
     {% block footer %}  
     </div>
+<!--
+
+This is commented out temporarily so that this can be inserted as an IFRAME
+
     <div class='footer'>
       <div class='container'>
         <div class='row-fluid'>
@@ -73,6 +82,7 @@
           </div>
       </div>
     </div>
+-->
     {% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
